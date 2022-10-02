@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../common/constants/assets.dart';
 import '../common/constants/colors.dart';
 import '../common/constants/styles.dart';
+import '../common/constants/strings.dart';
 
 class MessageTextField extends StatelessWidget {
   const MessageTextField({super.key});
@@ -11,7 +12,7 @@ class MessageTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColor.primary,
-      padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
+      padding: const EdgeInsets.fromLTRB(8, 12, 4, 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -33,14 +34,14 @@ class MessageTextField extends StatelessWidget {
                 fillColor: AppColor.primaryDark,
                 contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 isDense: true,
-                hintText: "Write a message",
+                hintText: AppString.messageBoxHintText,
               ),
               maxLines: 5,
               minLines: 1,
             ),
           ),
           const SizedBox(
-            width: 8.0,
+            width: 4,
           ),
           Material(
             color: Colors.transparent,

@@ -9,7 +9,8 @@ class AppColor {
   // static const Color secondary = Color(0xfffffff);
   // static const Color onSecondary = Color(0xfffffff);
   static const Color background = Color(0xffFFFFFF);
-  // static const Color onBackground = Color(0xfffffff);
+  static const Color onBackground = Color(0xff1a1a1a);
+  static const Color onBackgroundLight = Color(0xff777777);
   // static const Color accent = Color(0xfffffff);
   // static const Color onAccent = Color(0xfffffff);
   // static const Color disabled = Color(0xfffffff);
@@ -24,5 +25,4 @@ class AppColor {
   // static const Color divider = Color(0xfffffff);
   static const Color messageBoxBackground = Color(0xffF4F4F4);
   static const Color onMessageBoxBackground = Color(0xff424141);
-  static const Color onMessageBoxBackgroundLight = Color(0xff777777);
 }
