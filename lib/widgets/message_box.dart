@@ -1,6 +1,7 @@
-import 'package:ducktor/constants/colors.dart';
-import 'package:ducktor/constants/styles.dart';
 import 'package:flutter/material.dart';
+
+import '../common/constants/colors.dart';
+import '../common/constants/styles.dart';
 
 class MessageBox extends StatelessWidget {
   final String? senderName;
@@ -24,7 +25,7 @@ class MessageBox extends StatelessWidget {
       color: Colors.transparent,
       child: LayoutBuilder(builder: (context, constraints) {
         return Padding(
-          padding: AppGeneralStyle.messageBoxMargin,
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           child: Row(
             mainAxisAlignment:
                 alignRight ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -34,10 +35,10 @@ class MessageBox extends StatelessWidget {
                   maxWidth: constraints.maxWidth * widthRatio,
                 ),
                 child: Container(
-                  padding: AppGeneralStyle.messageBoxPadding,
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
                   decoration: BoxDecoration(
                     color: AppColor.messageBoxBackground,
-                    borderRadius: AppGeneralStyle.messageBoxBorderRadius,
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

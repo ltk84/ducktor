@@ -23,12 +23,3 @@ class AppTextStyle {
 class AppButtonStyle {
   AppButtonStyle._();
 }
-
-class AppGeneralStyle {
-  AppGeneralStyle._();
-
-  static BorderRadius messageBoxBorderRadius = BorderRadius.circular(12);
-  static EdgeInsets messageBoxPadding =
-      const EdgeInsets.fromLTRB(12, 12, 12, 12);
-  static EdgeInsets messageBoxMargin = const EdgeInsets.fromLTRB(8, 8, 8, 8);
-}

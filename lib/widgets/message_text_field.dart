@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../constants/assets.dart';
-import '../constants/colors.dart';
-import '../constants/styles.dart';
+import '../common/constants/assets.dart';
+import '../common/constants/colors.dart';
+import '../common/constants/styles.dart';
 
 class MessageTextField extends StatelessWidget {
   const MessageTextField({super.key});
