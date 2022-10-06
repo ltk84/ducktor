@@ -6,10 +6,16 @@ import '../common/constants/styles.dart';
 import '../common/constants/strings.dart';
 
 class MessageTextField extends StatelessWidget {
-  const MessageTextField({super.key});
+  final Function(String message) onSendMessage;
+  const MessageTextField({
+    super.key,
+    required this.onSendMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+
     return Container(
       color: AppColor.primary,
       padding: const EdgeInsets.fromLTRB(8, 12, 4, 12),
@@ -18,6 +24,7 @@ class MessageTextField extends StatelessWidget {
         children: [
           Flexible(
             child: TextFormField(
+              controller: controller,
               cursorColor: AppColor.onPrimary,
               style: AppTextStyle.regular16.copyWith(
                 color: AppColor.onPrimary,
@@ -46,7 +53,11 @@ class MessageTextField extends StatelessWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                if (controller.text.isNotEmpty) {
+                  onSendMessage(controller.text);
+                }
+              },
               borderRadius: BorderRadius.circular(12.0),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -6,7 +6,6 @@ import '../common/constants/assets.dart';
 import '../widgets/expandable_widget.dart';
 
 class MessageBox extends StatefulWidget {
-  final String? senderName;
   final String time;
   final String message;
   final bool alignRight;
@@ -15,7 +14,6 @@ class MessageBox extends StatefulWidget {
 
   const MessageBox({
     super.key,
-    this.senderName,
     required this.time,
     required this.message,
     this.alignRight = false,
