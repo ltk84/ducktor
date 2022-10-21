@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../common/constants/colors.dart';
-import '../common/constants/styles.dart';
-import '../common/constants/assets.dart';
+import '../../../common/constants/colors.dart';
+import '../../../common/constants/styles.dart';
+import '../../../common/constants/assets.dart';
 import '../widgets/expandable_widget.dart';
 
 class MessageBox extends StatefulWidget {

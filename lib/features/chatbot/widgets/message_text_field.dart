@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../common/constants/assets.dart';
-import '../common/constants/colors.dart';
-import '../common/constants/styles.dart';
-import '../common/constants/strings.dart';
+import '../../../common/constants/assets.dart';
+import '../../../common/constants/colors.dart';
+import '../../../common/constants/styles.dart';
+import '../../../common/constants/strings.dart';
 
 class MessageTextField extends StatelessWidget {
   final Function(String message) onSendMessage;
