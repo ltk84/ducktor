@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:ducktor/features/chatbot/chat_stream.dart';
 import 'package:ducktor/features/chatbot/message.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +17,6 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final ScrollController controller = ScrollController();
-
-  // List<String> duckBark = [
-  //   "Xin chào, tôi là Vịt Sĩ! Tôi có thể giúp gì cho bạn?",
-  //   "Là sao?",
-  //   "Kệ bạn",
-  //   "Cút hộ",
-  //   "Ai gảnh",
-  // ];
   List<Message> messages = [];
 
   final ChatStream _chatStream = ChatStream();
