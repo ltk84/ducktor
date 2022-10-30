@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:ducktor/features/chatbot/chat_stream.dart';
 import 'package:ducktor/features/chatbot/message.dart';
+import 'package:ducktor/features/chatbot/models/response.dart';
+import 'package:ducktor/features/chatbot/models/socket_io_event.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -24,19 +28,40 @@ class _ChatScreenState extends State<ChatScreen> {
   final Socket socket = io('http://192.168.1.85:5004/',
       OptionBuilder().setTransports(['websocket']).build());
 
+  String currentEvent = SocketIOEvent.message;
+
   void connectToSocketIO() {
-    socket.onConnect((data) => print('Client connected!'));
+    socket.onConnect((data) => log('Client connected!'));
+    socket.onDisconnect((data) => log('Client disconnect!'));
+    socket.onConnectError((data) => log('error $data'));
+    socket.onConnecting((data) => log('connecting...'));
+    socket.onConnectTimeout((data) => log('timeout'));
 
-    socket.onDisconnect((data) => print('Client disconnect!'));
+    socket.on(SocketIOEvent.message, (data) {
+      final response = Response.fromMap(data);
+      if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
+        currentEvent = response.nextEvent;
+      }
+      _chatStream.addResponse(
+          Message(author: Author.server, content: response.content));
+    });
 
-    socket.onConnectError((data) => print('error $data'));
+    socket.on(SocketIOEvent.diseasePrediction, (data) {
+      final response = Response.fromMap(data);
+      if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
+        currentEvent = response.nextEvent;
+      }
+      _chatStream.addResponse(
+          Message(author: Author.server, content: response.content));
+    });
 
-    socket.onConnecting((data) => print('connecting...'));
-
-    socket.onConnectTimeout((data) => print('timeout'));
-
-    socket.on('message', (data) {
-      _chatStream.addResponse(Message(author: Author.server, content: data));
+    socket.on(SocketIOEvent.receiveSymptoms, (data) {
+      final response = Response.fromMap(data);
+      if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
+        currentEvent = response.nextEvent;
+      }
+      _chatStream.addResponse(
+          Message(author: Author.server, content: response.content));
     });
   }
 
@@ -117,7 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void handleSendMessage(String message) {
     messages.insert(0, Message(author: Author.client, content: message));
-    socket.send([message]);
+    socket.emit(currentEvent, message);
   }
 
   MessageBox renderMessageBox(int index) {
