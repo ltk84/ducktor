@@ -25,4 +25,8 @@ class AppColor {
   // static const Color divider = Color(0xfffffff);
   static const Color messageBoxBackground = Color(0xffF4F4F4);
   static const Color onMessageBoxBackground = Color(0xff424141);
+  static const Color suggestMessageBoxBackground = Color(0xffF4F4F4);
+  static const Color onSuggestMessageBoxBackground = Color(0xff424141);
+  static const Color suggestMessageBoxOverlay =
+      Color.fromARGB(255, 227, 227, 227);
 }

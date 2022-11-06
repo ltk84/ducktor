@@ -4,6 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTextStyle {
   AppTextStyle._();
 
+  static TextStyle semiBold16 = GoogleFonts.notoSans(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+  );
+
   static TextStyle semiBold18 = GoogleFonts.notoSans(
     fontSize: 18,
     fontWeight: FontWeight.w600,
@@ -22,4 +27,54 @@ class AppTextStyle {
 
 class AppButtonStyle {
   AppButtonStyle._();
+  static ButtonStyle suggesstMessage({
+    required Color backgroundColor,
+    required Color foregroundColor,
+    Color overlayColor = const Color.fromARGB(255, 227, 227, 227),
+  }) {
+    return ButtonStyle(
+      textStyle: MaterialStatePropertyAll<TextStyle?>(
+        AppTextStyle.regular16,
+      ),
+      foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return foregroundColor.withOpacity(0.8);
+          } else {
+            return foregroundColor;
+          }
+        },
+      ),
+      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return backgroundColor;
+          } else {
+            return backgroundColor;
+          }
+        },
+      ),
+      elevation: MaterialStateProperty.resolveWith<double?>((states) {
+        if (states.contains(MaterialState.pressed)) {
+          return 1;
+        } else {
+          return 0.5;
+        }
+      }),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.0),
+        ),
+      ),
+      overlayColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return overlayColor;
+          } else {
+            return backgroundColor;
+          }
+        },
+      ),
+    );
+  }
 }

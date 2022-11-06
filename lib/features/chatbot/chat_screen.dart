@@ -4,6 +4,7 @@ import 'package:ducktor/features/chatbot/chat_stream.dart';
 import 'package:ducktor/features/chatbot/message.dart';
 import 'package:ducktor/features/chatbot/models/response.dart';
 import 'package:ducktor/features/chatbot/models/socket_io_event.dart';
+import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -121,16 +122,35 @@ class _ChatScreenState extends State<ChatScreen> {
                         },
                       ),
                     ),
-                    MessageTextField(
-                      onSendMessage: (message) {
-                        handleSendMessage(message);
+                    Column(
+                      children: [
+                        Container(
+                          height: 50,
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics(),
+                            ),
+                            children: const [
+                              SuggestMessageBox(message: 'Hello'),
+                              SuggestMessageBox(message: 'Hi'),
+                              SuggestMessageBox(message: 'Alo'),
+                            ],
+                          ),
+                        ),
+                        MessageTextField(
+                          onSendMessage: (message) {
+                            handleSendMessage(message);
 
-                        controller.animateTo(
-                          0,
-                          curve: Curves.linear,
-                          duration: const Duration(milliseconds: 300),
-                        );
-                      },
+                            controller.animateTo(
+                              0,
+                              curve: Curves.linear,
+                              duration: const Duration(milliseconds: 300),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
