@@ -12,4 +12,9 @@ class Response {
         content: map['content'] ?? '',
         nextEvent: map['next_event'] ?? '');
   }
+
+  @override
+  String toString() {
+    return 'intent: $intent | content: $content | nextEvent: $nextEvent';
+  }
 }
