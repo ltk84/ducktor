@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:ducktor/features/chatbot/chat_stream.dart';
 import 'package:ducktor/features/chatbot/message.dart';
 import 'package:ducktor/features/chatbot/models/response.dart';
-import 'package:ducktor/features/chatbot/models/socket_io_event.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -29,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final Socket socket = io('http://192.168.1.85:5004/',
       OptionBuilder().setTransports(['websocket']).build());
 
-  String currentEvent = SocketIOEvent.message;
+  String currentEvent = 'message';
 
   void connectToSocketIO() {
     socket.onConnect((data) => log('Client connected!'));
@@ -38,32 +37,43 @@ class _ChatScreenState extends State<ChatScreen> {
     socket.onConnecting((data) => log('connecting...'));
     socket.onConnectTimeout((data) => log('timeout'));
 
-    socket.on(SocketIOEvent.message, (data) {
+    socket.on(currentEvent, (data) {
       final response = Response.fromMap(data);
       if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
         currentEvent = response.nextEvent;
       }
+      log('Client receive: ${response.toString()}');
       _chatStream.addResponse(
           Message(author: Author.server, content: response.content));
     });
 
-    socket.on(SocketIOEvent.diseasePrediction, (data) {
-      final response = Response.fromMap(data);
-      if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
-        currentEvent = response.nextEvent;
-      }
-      _chatStream.addResponse(
-          Message(author: Author.server, content: response.content));
-    });
+    // socket.on(SocketIOEvent.diseasePrediction, (data) {
+    //   final response = Response.fromMap(data);
+    //   if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
+    //     currentEvent = response.nextEvent;
+    //   }
+    //   _chatStream.addResponse(
+    //       Message(author: Author.server, content: response.content));
+    // });
 
-    socket.on(SocketIOEvent.receiveSymptoms, (data) {
-      final response = Response.fromMap(data);
-      if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
-        currentEvent = response.nextEvent;
-      }
-      _chatStream.addResponse(
-          Message(author: Author.server, content: response.content));
-    });
+    // socket.on(SocketIOEvent.receiveSymptoms, (data) {
+    //   final response = Response.fromMap(data);
+    //   if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
+    //     currentEvent = response.nextEvent;
+    //   }
+    //   _chatStream.addResponse(
+    //       Message(author: Author.server, content: response.content));
+    // });
+
+    // socket.on(SocketIOEvent.diseaseInformation, (data) {
+    //   final response = Response.fromMap(data);
+    //   if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
+    //     currentEvent = response.nextEvent;
+    //   }
+    //   log(response.toString());
+    //   _chatStream.addResponse(
+    //       Message(author: Author.server, content: response.content));
+    // });
   }
 
   @override
