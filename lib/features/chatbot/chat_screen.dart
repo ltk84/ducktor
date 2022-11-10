@@ -171,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void handleSendMessage(String message) {
-    messages.insert(0, Message(author: Author.client, content: message));
+    _chatStream.addResponse(Message(author: Author.client, content: message));
     socket.emit(currentEvent, message);
   }
 
