@@ -124,11 +124,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     Column(
                       children: [
-                        Container(
-                          height: 50,
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                        SizedBox(
+                          height: 60,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                             physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics(),
                             ),

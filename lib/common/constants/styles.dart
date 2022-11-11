@@ -31,6 +31,7 @@ class AppButtonStyle {
     required Color backgroundColor,
     required Color foregroundColor,
     Color overlayColor = const Color.fromARGB(255, 227, 227, 227),
+    Color outlineColor = const Color.fromARGB(255, 243, 243, 243),
   }) {
     return ButtonStyle(
       textStyle: MaterialStatePropertyAll<TextStyle?>(
@@ -56,15 +57,27 @@ class AppButtonStyle {
       ),
       elevation: MaterialStateProperty.resolveWith<double?>((states) {
         if (states.contains(MaterialState.pressed)) {
-          return 1;
+          return 3;
         } else {
-          return 0.5;
+          return 2;
         }
       }),
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24.0),
-        ),
+      shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24.0),
+              side: BorderSide.none,
+            );
+          } else {
+            return RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24.0),
+              side: BorderSide(
+                color: outlineColor,
+              ),
+            );
+          }
+        },
       ),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
         (states) {

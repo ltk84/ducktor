@@ -9,7 +9,7 @@ class SuggestMessageBox extends StatelessWidget {
   const SuggestMessageBox({
     super.key,
     required this.message,
-    this.margin = const EdgeInsets.fromLTRB(8, 0, 8, 0),
+    this.margin = const EdgeInsets.fromLTRB(4, 4, 4, 4),
   });
 
   @override
@@ -22,6 +22,7 @@ class SuggestMessageBox extends StatelessWidget {
           backgroundColor: AppColor.suggestMessageBoxBackground,
           foregroundColor: AppColor.onSuggestMessageBoxBackground,
           overlayColor: AppColor.suggestMessageBoxOverlay,
+          outlineColor: AppColor.suggestMessageBoxOutlineColor,
         ),
         child: Text(
           message,
