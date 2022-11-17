@@ -14,6 +14,21 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
   );
 
+  static TextStyle bold24 = GoogleFonts.notoSans(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle black18 = GoogleFonts.notoSans(
+    fontSize: 18,
+    fontWeight: FontWeight.w900,
+  );
+
+  static TextStyle regular18 = GoogleFonts.notoSans(
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+  );
+
   static TextStyle regular16 = GoogleFonts.notoSans(
     fontSize: 16,
     fontWeight: FontWeight.w400,

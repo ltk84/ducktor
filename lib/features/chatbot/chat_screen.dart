@@ -26,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final ChatStream _chatStream = ChatStream();
   // Change to your PC's IPv4
-  final Socket socket = io('http://192.168.1.85:5004/',
+  final Socket socket = io('http://192.168.100.7:5004/',
       OptionBuilder().setTransports(['websocket']).build());
 
   String currentEvent = SocketIOEvent.message;
