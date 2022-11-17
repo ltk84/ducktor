@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class CovidInfoCountry {
   String name = "World";
-  String queryString = "global";
-  IconData? icon;
-  Color? backgroundColor;
+  String endpoint = "/global";
+  String asset;
+  Color backgroundColor;
 
   CovidInfoCountry({
     required this.name,
-    required this.queryString,
-    this.icon,
-    this.backgroundColor,
+    required this.endpoint,
+    this.asset = '',
+    this.backgroundColor = Colors.blue,
   });
 }

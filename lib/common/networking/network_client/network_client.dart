@@ -36,7 +36,7 @@ class NetworkClient {
     RequestMethod method,
     String path,
     Map<String, dynamic>? parameters,
-    Map<String, dynamic> header,
+    Map<String, dynamic>? header,
   ) async {
     late Response result;
     try {
