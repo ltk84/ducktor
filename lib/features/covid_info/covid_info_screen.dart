@@ -1,4 +1,4 @@
-import 'package:ducktor/common/constants/assets.dart';
+import 'package:ducktor/features/covid_info/viewmodel/covid_info_viewmodel.dart';
 import 'package:ducktor/features/covid_info/widgets/country_widget.dart';
 import 'package:ducktor/features/covid_info/widgets/date_picker.dart';
 import 'package:ducktor/features/covid_info/widgets/info_tile.dart';
@@ -16,19 +16,20 @@ class CovidInfoScreen extends StatefulWidget {
 }
 
 class _CovidInfoScreenState extends State<CovidInfoScreen> {
-  final PageController _controller = PageController();
-  late Color backgroundColor;
-  @override
-  void initState() {
-    backgroundColor = Colors.blue;
-    super.initState();
-  }
+  final CovidInfoViewModel viewModel = CovidInfoViewModel();
+
+  String _totalInfectedCases = "0";
+  String _totalRecoveries = "0";
+  String _totalDeaths = "0";
+  String _newInfectedCases = "0";
+  String _newRecoveries = "0";
+  String _newDeaths = "0";
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: backgroundColor,
+        backgroundColor: viewModel.getSelectedCountry().backgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -61,29 +62,24 @@ class _CovidInfoScreenState extends State<CovidInfoScreen> {
                     height: constraints.maxHeight * 0.3,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 24),
-                      child: PageView(
-                        controller: _controller,
-                        onPageChanged: (index) {
+                      child: PageView.builder(
+                        onPageChanged: (index) async {
                           setState(() {
-                            backgroundColor =
-                                index == 0 ? Colors.blue : Colors.red;
+                            viewModel.changeCountry(index);
                           });
                         },
                         physics: const BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics(),
                         ),
-                        children: [
-                          CountryWidget(
-                            asset: AppAsset.world,
-                            name: 'WORLD',
+                        itemCount: viewModel.countryCount,
+                        itemBuilder: (context, index) {
+                          return CountryWidget(
+                            asset: viewModel.getCountry(index).asset,
+                            name:
+                                viewModel.getCountry(index).name.toUpperCase(),
                             maxWidth: countryImageMaxWidth,
-                          ),
-                          CountryWidget(
-                            asset: AppAsset.vietnamFlag,
-                            name: 'VIET NAM',
-                            maxWidth: countryImageMaxWidth,
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -94,60 +90,93 @@ class _CovidInfoScreenState extends State<CovidInfoScreen> {
                   const SizedBox(
                     height: 24,
                   ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    decoration: BoxDecoration(
-                      color: AppColor.background,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Expanded(
-                                child: TextInfoWidget(
-                                  text: '69',
-                                  description: 'recovered',
-                                  primaryColor: Colors.green,
+                  FutureBuilder(
+                      future: Future.wait([
+                        viewModel.getTotalInfectedCases(),
+                        viewModel.getTotalRecoveries(),
+                        viewModel.getTotalDeaths(),
+                        viewModel.getNewInfectedCases(),
+                        viewModel.getNewRecoveries(),
+                        viewModel.getNewDeaths(),
+                      ]),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data != null) {
+                            _totalInfectedCases = snapshot.data![0];
+                            _totalRecoveries = snapshot.data![1];
+                            _totalDeaths = snapshot.data![2];
+                            _newInfectedCases = snapshot.data![3];
+                            _newRecoveries = snapshot.data![4];
+                            _newDeaths = snapshot.data![5];
+                          }
+                        }
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.fromLTRB(24, 8, 24, 0),
+                            child: LinearProgressIndicator(),
+                          );
+                        }
+
+                        return Container(
+                          margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                          decoration: BoxDecoration(
+                            color: AppColor.background,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: TextInfoWidget(
+                                        text: _newRecoveries,
+                                        description: 'recoveries',
+                                        primaryColor: Colors.green,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextInfoWidget(
+                                        text: _newInfectedCases,
+                                        description: 'new infected\ncases',
+                                        primaryColor: Colors.orange,
+                                        isMain: true,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: TextInfoWidget(
+                                        text: _newDeaths,
+                                        description: 'deaths',
+                                        primaryColor: Colors.red,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                child: TextInfoWidget(
-                                  text: '1000',
-                                  description: 'new confirmed cases',
-                                  primaryColor: Colors.orange,
-                                  isMain: true,
-                                ),
+                              InfoTile(
+                                content:
+                                    '$_totalInfectedCases infected cases in total',
+                                backgroundColor: Colors.orange,
                               ),
-                              Expanded(
-                                child: TextInfoWidget(
-                                  text: '69',
-                                  description: 'death',
-                                  primaryColor: Colors.red,
-                                ),
+                              InfoTile(
+                                content: '$_totalDeaths deaths in total',
+                                backgroundColor: Colors.red,
+                              ),
+                              InfoTile(
+                                content:
+                                    '$_totalRecoveries recoveries in total',
+                                backgroundColor: Colors.green,
                               ),
                             ],
                           ),
-                        ),
-                        const InfoTile(
-                          content: '6969 recoveries in total',
-                          backgroundColor: Colors.orange,
-                        ),
-                        const InfoTile(
-                          content: '6969 deaths in total',
-                          backgroundColor: Colors.red,
-                        ),
-                        const InfoTile(
-                          content: '6969 new in total',
-                          backgroundColor: Colors.green,
-                        ),
-                      ],
-                    ),
-                  ),
+                        );
+                      }),
                 ],
               ),
             ),
