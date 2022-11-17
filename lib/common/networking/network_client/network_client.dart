@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:ducktor/common/networking/ducktor_header.dart';
-import 'package:ducktor/common/networking/ducktor_request_parameter.dart';
 import 'package:ducktor/common/networking/ducktor_response.dart';
 import 'package:ducktor/common/networking/network_client/network_logging.dart';
 import 'package:ducktor/common/networking/networking_constant.dart';
@@ -14,7 +12,7 @@ class NetworkClient {
   factory NetworkClient(String endPoint) {
     final parseURI = Uri.tryParse(endPoint);
     if (parseURI != null) {
-      _instance.baseUrl = Uri.http(endPoint);
+      _instance.baseUrl = parseURI;
       _instance.dioClient = Dio(BaseOptions(
         baseUrl: _instance.baseUrl.toString(),
         connectTimeout: NetworkingConstant.apiConnectTimeout,
@@ -37,33 +35,30 @@ class NetworkClient {
   Future<DucktorResponse?> request<T>(
     RequestMethod method,
     String path,
-    DucktorRequestParameter? requestParameters,
-    DucktorHeader header,
+    Map<String, dynamic>? parameters,
+    Map<String, dynamic> header,
   ) async {
     late Response result;
     try {
-      final options = Options(headers: header.requestHeader);
+      final options = Options(headers: header);
       switch (method) {
         case RequestMethod.get:
           result = await dioClient.get(path,
-              queryParameters: requestParameters?.requestParameter,
-              options: options);
+              queryParameters: parameters, options: options);
           break;
         case RequestMethod.post:
-          result = await dioClient.post(path,
-              data: requestParameters?.requestParameter, options: options);
+          result =
+              await dioClient.post(path, data: parameters, options: options);
           break;
         case RequestMethod.put:
-          result = await dioClient.put(path,
-              data: requestParameters?.requestParameter, options: options);
+          result =
+              await dioClient.put(path, data: parameters, options: options);
           break;
         case RequestMethod.patch:
-          result = await dioClient.patch(path,
-              data: requestParameters?.requestParameter);
+          result = await dioClient.patch(path, data: parameters);
           break;
         case RequestMethod.delete:
-          result = await dioClient.delete(path,
-              data: requestParameters?.requestParameter);
+          result = await dioClient.delete(path, data: parameters);
           break;
       }
 
