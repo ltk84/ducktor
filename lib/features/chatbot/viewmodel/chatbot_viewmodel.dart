@@ -40,11 +40,11 @@ class ChatbotViewModel {
           dateTime: DateTime.now());
       _chatStream.addResponse([serverMessage]);
       saveNewMessageToChatHistory(serverMessage.toJson());
+      handleNextAction(response);
     });
-
-    _socket.on(SocketIOEvent.askForUserLocation,
-        (data) => {print('handle in another subscription')});
   }
+
+  void handleNextAction(Response response) {}
 
   void sendMessage(String message) {
     final newMessage = Message(
