@@ -1,7 +1,7 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:ducktor/common/local_storage/local_storage_client.dart';
+import 'package:ducktor/features/chatbot/model/socket_io_event.dart';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -42,33 +42,8 @@ class ChatbotViewModel {
       saveNewMessageToChatHistory(serverMessage.toJson());
     });
 
-    // socket.on(SocketIOEvent.diseasePrediction, (data) {
-    //   final response = Response.fromMap(data);
-    //   if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
-    //     currentEvent = response.nextEvent;
-    //   }
-    //   _chatStream.addResponse(
-    //       Message(author: Author.server, content: response.content));
-    // });
-
-    // socket.on(SocketIOEvent.receiveSymptoms, (data) {
-    //   final response = Response.fromMap(data);
-    //   if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
-    //     currentEvent = response.nextEvent;
-    //   }
-    //   _chatStream.addResponse(
-    //       Message(author: Author.server, content: response.content));
-    // });
-
-    // socket.on(SocketIOEvent.diseaseInformation, (data) {
-    //   final response = Response.fromMap(data);
-    //   if (response.nextEvent.isNotEmpty && currentEvent != response.nextEvent) {
-    //     currentEvent = response.nextEvent;
-    //   }
-    //   log(response.toString());
-    //   _chatStream.addResponse(
-    //       Message(author: Author.server, content: response.content));
-    // });
+    _socket.on(SocketIOEvent.askForUserLocation,
+        (data) => {print('handle in another subscription')});
   }
 
   void sendMessage(String message) {

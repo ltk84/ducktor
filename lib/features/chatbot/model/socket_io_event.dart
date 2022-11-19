@@ -5,4 +5,5 @@ class SocketIOEvent {
   static const diseasePrediction = 'disease_prediction';
   static const receiveSymptoms = 'receive_symptoms';
   static const diseaseInformation = 'disease_information';
+  static const askForUserLocation = 'ask_for_user_location';
 }
