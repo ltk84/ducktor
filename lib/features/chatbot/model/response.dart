@@ -3,18 +3,24 @@ class Response {
   final String intent;
   final String content;
   final String nextEvent;
+  final String actionCode;
 
-  Response({required this.intent, required this.content, this.nextEvent = ''});
+  Response(
+      {required this.intent,
+      required this.content,
+      this.nextEvent = '',
+      this.actionCode = ''});
 
   factory Response.fromMap(Map<String, dynamic> map) {
     return Response(
         intent: map['intent'] ?? '',
         content: map['content'] ?? '',
-        nextEvent: map['next_event'] ?? '');
+        nextEvent: map['next_event'] ?? '',
+        actionCode: map['action_code'] ?? '');
   }
 
   @override
   String toString() {
-    return 'intent: $intent | content: $content | nextEvent: $nextEvent';
+    return 'intent: $intent | content: $content | nextEvent: $nextEvent | actionCode: $actionCode';
   }
 }
