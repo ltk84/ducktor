@@ -19,7 +19,7 @@ class Response {
       content: map['content'] ?? '',
       nextEvent: map['next_event'],
       actionCode: map['action_code'],
-      suggestMessages: map['suggest_messages'],
+      suggestMessages: List<String>.from(map['suggest_messages']),
     );
   }
 
