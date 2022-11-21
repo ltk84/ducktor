@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:ducktor/common/local_storage/local_storage_client.dart';
-import 'package:ducktor/features/chatbot/model/socket_io_event.dart';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -11,11 +10,12 @@ import '../model/response.dart';
 
 class ChatbotViewModel {
   // Change to your PC's IPv4
-  final Socket _socket = io('http://192.168.100.7:5004/',
+  final Socket _socket = io('http://172.30.2.237:5004/',
       OptionBuilder().setTransports(['websocket']).build());
 
   String currentEvent = 'message';
   final ChatStream _chatStream = ChatStream();
+  final List<String> suggestMessages = [];
   final localStorageClient = LocalStorageClient();
 
   ChatStream get chatStream => _chatStream;
@@ -38,10 +38,19 @@ class ChatbotViewModel {
           author: Author.server,
           content: response.content,
           dateTime: DateTime.now());
+
+      handleSuggestMessages(response.suggestMessages ?? []);
       _chatStream.addResponse([serverMessage]);
       saveNewMessageToChatHistory(serverMessage.toJson());
       handleNextAction(response);
     });
+  }
+
+  void handleSuggestMessages(List<String> suggestMessages) {
+    this.suggestMessages.clear();
+    if (suggestMessages.isNotEmpty) {
+      this.suggestMessages.addAll(suggestMessages);
+    }
   }
 
   void handleNextAction(Response response) {}
