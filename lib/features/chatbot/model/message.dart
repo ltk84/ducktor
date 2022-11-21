@@ -9,30 +9,31 @@ class Message {
   final String content;
   final DateTime dateTime;
 
-  Message({
-    required this.id,
-    required this.author,
-    required this.content,
-    required this.dateTime,
-  });
+  Message(
+      {required this.id,
+      required this.author,
+      required this.content,
+      required this.dateTime});
 
   bool get isClientMessage => author == Author.client;
 
+  // Không có trường suggestMessage vì không muốn local storage lưu nó => Vì nó k cần thiết
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'author': author.index,
       'content': content,
-      'dateTime': dateTime.toString(),
+      'dateTime': dateTime.toString()
     };
   }
 
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
-        id: map['id'] ?? '',
-        author: map['author'] == 0 ? Author.server : Author.client,
-        content: map['content'] ?? '',
-        dateTime: DateTime.parse(map['dateTime'] ?? "2001-01-01"));
+      id: map['id'] ?? '',
+      author: map['author'] == 0 ? Author.server : Author.client,
+      content: map['content'] ?? '',
+      dateTime: DateTime.parse(map['dateTime'] ?? "2001-01-01"),
+    );
   }
 
   String toJson() => json.encode(toMap());

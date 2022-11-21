@@ -89,17 +89,15 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         SizedBox(
                           height: 60,
-                          child: ListView(
+                          child: ListView.builder(
+                            itemCount: viewModel.suggestMessages.length,
+                            itemBuilder: (_, index) => SuggestMessageBox(
+                                message: viewModel.suggestMessages[index]),
                             scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                             physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics(),
                             ),
-                            children: const [
-                              SuggestMessageBox(message: 'Hello'),
-                              SuggestMessageBox(message: 'Hi'),
-                              SuggestMessageBox(message: 'Alo'),
-                            ],
                           ),
                         ),
                         MessageTextField(

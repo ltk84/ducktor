@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:ducktor/common/local_storage/local_storage_client.dart';
-import 'package:ducktor/features/chatbot/model/socket_io_event.dart';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -16,6 +15,7 @@ class ChatbotViewModel {
 
   String currentEvent = 'message';
   final ChatStream _chatStream = ChatStream();
+  final List<String> suggestMessages = [];
   final localStorageClient = LocalStorageClient();
 
   ChatStream get chatStream => _chatStream;
@@ -38,10 +38,19 @@ class ChatbotViewModel {
           author: Author.server,
           content: response.content,
           dateTime: DateTime.now());
+
+      handleSuggestMessages(response.suggestMessages ?? []);
       _chatStream.addResponse([serverMessage]);
       saveNewMessageToChatHistory(serverMessage.toJson());
       handleNextAction(response);
     });
+  }
+
+  void handleSuggestMessages(List<String> suggestMessages) {
+    this.suggestMessages.clear();
+    if (suggestMessages.isNotEmpty) {
+      this.suggestMessages.addAll(suggestMessages);
+    }
   }
 
   void handleNextAction(Response response) {}
