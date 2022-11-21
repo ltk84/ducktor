@@ -10,7 +10,7 @@ import '../model/response.dart';
 
 class ChatbotViewModel {
   // Change to your PC's IPv4
-  final Socket _socket = io('http://172.30.2.237:5004/',
+  final Socket _socket = io('http://192.168.1.85:5004/',
       OptionBuilder().setTransports(['websocket']).build());
 
   String currentEvent = 'message';
