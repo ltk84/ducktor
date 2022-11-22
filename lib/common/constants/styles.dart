@@ -105,4 +105,56 @@ class AppButtonStyle {
       ),
     );
   }
+
+  static ButtonStyle elevated({
+    required Color backgroundColor,
+    required Color foregroundColor,
+    Color overlayColor = const Color.fromARGB(255, 227, 227, 227),
+  }) {
+    return ButtonStyle(
+      textStyle: MaterialStatePropertyAll<TextStyle?>(
+        AppTextStyle.semiBold16,
+      ),
+      foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return foregroundColor.withOpacity(0.8);
+          } else {
+            return foregroundColor;
+          }
+        },
+      ),
+      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return backgroundColor;
+          } else {
+            return backgroundColor;
+          }
+        },
+      ),
+      elevation: MaterialStateProperty.resolveWith<double?>((states) {
+        if (states.contains(MaterialState.pressed)) {
+          return 1;
+        } else {
+          return 0.5;
+        }
+      }),
+      shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          side: BorderSide.none,
+        ),
+      ),
+      overlayColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return overlayColor;
+          } else {
+            return backgroundColor;
+          }
+        },
+      ),
+    );
+  }
 }

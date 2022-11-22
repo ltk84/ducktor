@@ -8,7 +8,7 @@ import '../../../common/networking/networking_constant.dart';
 import '../models/covid_info_country.dart';
 
 class CovidInfoViewModel {
-  final _network = NetworkClient("http://192.168.100.9:5004");
+  final _network = NetworkClient("http://192.168.100.16:5004");
 
   final List<CovidInfoCountry> _countries = [
     CovidInfoCountry(

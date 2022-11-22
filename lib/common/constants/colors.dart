@@ -17,4 +17,8 @@ class AppColor {
       Color.fromARGB(255, 243, 243, 243);
   static const Color suggestMessageBoxOverlay =
       Color.fromARGB(255, 227, 227, 227);
+  static const Color buttonOnMessageBoxBackground =
+      Color.fromARGB(255, 255, 255, 255);
+  static const Color onButtonOnMessageBoxBackground =
+      Color.fromARGB(255, 104, 104, 104);
 }
