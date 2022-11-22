@@ -21,4 +21,7 @@ class AppColor {
       Color.fromARGB(255, 255, 255, 255);
   static const Color onButtonOnMessageBoxBackground =
       Color.fromARGB(255, 104, 104, 104);
+  static const Color typingDot = Color.fromARGB(255, 204, 204, 204);
+  static const Color flashingCircleDark = Color.fromARGB(255, 167, 167, 167);
+  static const Color flashingCircleBright = Color.fromARGB(255, 238, 238, 238);
 }
