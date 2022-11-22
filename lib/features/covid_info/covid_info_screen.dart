@@ -91,92 +91,87 @@ class _CovidInfoScreenState extends State<CovidInfoScreen> {
                     height: 24,
                   ),
                   FutureBuilder(
-                      future: Future.wait([
-                        viewModel.getTotalInfectedCases(),
-                        viewModel.getTotalRecoveries(),
-                        viewModel.getTotalDeaths(),
-                        viewModel.getNewInfectedCases(),
-                        viewModel.getNewRecoveries(),
-                        viewModel.getNewDeaths(),
-                      ]),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          if (snapshot.data != null) {
-                            _totalInfectedCases = snapshot.data![0];
-                            _totalRecoveries = snapshot.data![1];
-                            _totalDeaths = snapshot.data![2];
-                            _newInfectedCases = snapshot.data![3];
-                            _newRecoveries = snapshot.data![4];
-                            _newDeaths = snapshot.data![5];
-                          }
+                    future: viewModel.fetchSummaryInfo(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data != null) {
+                          _totalInfectedCases =
+                              snapshot.data!.totalInfectedCases.toString();
+                          _totalRecoveries =
+                              snapshot.data!.totalRecoveries.toString();
+                          _totalDeaths = snapshot.data!.totalDeaths.toString();
+                          _newInfectedCases =
+                              snapshot.data!.newInfectedCases.toString();
+                          _newRecoveries =
+                              snapshot.data!.newRecoveries.toString();
+                          _newDeaths = snapshot.data!.newDeaths.toString();
                         }
+                      }
 
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.fromLTRB(24, 8, 24, 0),
-                            child: LinearProgressIndicator(),
-                          );
-                        }
-
-                        return Container(
-                          margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          decoration: BoxDecoration(
-                            color: AppColor.background,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 16, 0, 16),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: TextInfoWidget(
-                                        text: _newRecoveries,
-                                        description: 'recoveries',
-                                        primaryColor: Colors.green,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: TextInfoWidget(
-                                        text: _newInfectedCases,
-                                        description: 'new infected\ncases',
-                                        primaryColor: Colors.orange,
-                                        isMain: true,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: TextInfoWidget(
-                                        text: _newDeaths,
-                                        description: 'deaths',
-                                        primaryColor: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              InfoTile(
-                                content:
-                                    '$_totalInfectedCases infected cases in total',
-                                backgroundColor: Colors.orange,
-                              ),
-                              InfoTile(
-                                content: '$_totalDeaths deaths in total',
-                                backgroundColor: Colors.red,
-                              ),
-                              InfoTile(
-                                content:
-                                    '$_totalRecoveries recoveries in total',
-                                backgroundColor: Colors.green,
-                              ),
-                            ],
-                          ),
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Padding(
+                          padding: EdgeInsets.fromLTRB(24, 8, 24, 0),
+                          child: LinearProgressIndicator(),
                         );
-                      }),
+                      }
+
+                      return Container(
+                        margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        decoration: BoxDecoration(
+                          color: AppColor.background,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: TextInfoWidget(
+                                      text: _newRecoveries,
+                                      description: 'recoveries',
+                                      primaryColor: Colors.green,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextInfoWidget(
+                                      text: _newInfectedCases,
+                                      description: 'new infected\ncases',
+                                      primaryColor: Colors.orange,
+                                      isMain: true,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextInfoWidget(
+                                      text: _newDeaths,
+                                      description: 'deaths',
+                                      primaryColor: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            InfoTile(
+                              content:
+                                  '$_totalInfectedCases infected cases in total',
+                              backgroundColor: Colors.orange,
+                            ),
+                            InfoTile(
+                              content: '$_totalDeaths deaths in total',
+                              backgroundColor: Colors.red,
+                            ),
+                            InfoTile(
+                              content: '$_totalRecoveries recoveries in total',
+                              backgroundColor: Colors.green,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
