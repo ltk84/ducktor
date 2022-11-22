@@ -11,6 +11,9 @@ class MessageBox extends StatefulWidget {
   final bool alignRight;
   final double widthRatio;
   final bool highlight;
+  final bool showButton;
+  final Function()? buttonHandler;
+  final String buttonContent;
 
   const MessageBox({
     super.key,
@@ -19,6 +22,9 @@ class MessageBox extends StatefulWidget {
     this.alignRight = false,
     this.widthRatio = 0.6,
     this.highlight = false,
+    this.showButton = false,
+    this.buttonHandler,
+    this.buttonContent = 'Tap here',
   });
 
   @override
@@ -96,6 +102,20 @@ class _MessageBoxState extends State<MessageBox> {
                                     ),
                                   ),
                                 ),
+                                if (widget.showButton)
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: widget.buttonHandler,
+                                      style: AppButtonStyle.elevated(
+                                        backgroundColor: AppColor
+                                            .buttonOnMessageBoxBackground,
+                                        foregroundColor: AppColor
+                                            .onButtonOnMessageBoxBackground,
+                                      ),
+                                      child: Text(widget.buttonContent),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),

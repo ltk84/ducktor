@@ -42,7 +42,11 @@ dependencies:
   flutter_bloc: ^8.1.1
   socket_io_client: ^2.0.0
   path_provider: ^2.0.11
+<<<<<<< HEAD
   android_intent_plus: ^3.1.5
+=======
+  url_launcher: ^6.1.7
+>>>>>>> ad3b903 (navigate to google map application)
 
 dev_dependencies:
   flutter_test:
