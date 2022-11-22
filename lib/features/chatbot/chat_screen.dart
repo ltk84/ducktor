@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:ducktor/features/chatbot/model/message.dart';
 import 'package:ducktor/features/chatbot/viewmodel/chatbot_viewmodel.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/constants/colors.dart';
 import '../../common/constants/styles.dart';
@@ -72,48 +76,49 @@ class _ChatScreenState extends State<ChatScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: ListView.builder(
-                        reverse: true,
-                        controller: controller,
-                        padding: const EdgeInsets.all(8.0),
-                        physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics(),
-                        ),
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          return renderMessageBox(index);
-                        },
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomStart,
+                        children: [
+                          ListView.builder(
+                            reverse: true,
+                            controller: controller,
+                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 54),
                             physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics(),
                             ),
-                            children: const [
-                              SuggestMessageBox(message: 'Hello'),
-                              SuggestMessageBox(message: 'Hi'),
-                              SuggestMessageBox(message: 'Alo'),
-                            ],
+                            itemCount: messages.length,
+                            itemBuilder: (context, index) {
+                              return renderMessageBox(index);
+                            },
                           ),
-                        ),
-                        MessageTextField(
-                          onSendMessage: (message) {
-                            handleSendMessage(message);
+                          SizedBox(
+                            height: 60,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+                              physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics(),
+                              ),
+                              children: const [
+                                SuggestMessageBox(message: 'Hello'),
+                                SuggestMessageBox(message: 'Hi'),
+                                SuggestMessageBox(message: 'Alo'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    MessageTextField(
+                      onSendMessage: (message) {
+                        handleSendMessage(message);
 
-                            controller.animateTo(
-                              0,
-                              curve: Curves.linear,
-                              duration: const Duration(milliseconds: 300),
-                            );
-                          },
-                        ),
-                      ],
+                        controller.animateTo(
+                          0,
+                          curve: Curves.linear,
+                          duration: const Duration(milliseconds: 300),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -134,6 +139,31 @@ class _ChatScreenState extends State<ChatScreen> {
       return MessageBox(
         time: message.dateTime.toString(),
         message: messages[index].content,
+        // showButton: true,
+        // buttonHandler: () async {
+        //   double lat = 10.77134;
+        //   double lon = 106.629766;
+        //   String locationName = "Tiệm Sửa Xe Phước";
+        //   String address = "61 Cây keo";
+        //   if (Platform.isAndroid) {
+        //     Uri url = Uri.parse("geo:$lat,$lon?q=$locationName $address");
+
+        //     AndroidIntent intent = AndroidIntent(
+        //       action: 'action_view',
+        //       data: url.toString(),
+        //       package: 'com.google.android.apps.maps',
+        //     );
+
+        //     await intent.launch();
+        //   } else if (Platform.isIOS) {
+        //     Uri url = Uri.parse(
+        //         "comgooglemaps://?q=$locationName $address&center=$lat,$lon");
+
+        //     if (!await launchUrl(url)) {
+        //       throw 'Could not launch $url';
+        //     }
+        //   }
+        // },
       );
     } else {
       return MessageBox(
