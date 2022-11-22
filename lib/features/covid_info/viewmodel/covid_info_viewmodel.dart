@@ -1,3 +1,4 @@
+import 'package:ducktor/features/covid_info/models/covid_info_summary.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/constants/assets.dart';
@@ -7,7 +8,7 @@ import '../../../common/networking/networking_constant.dart';
 import '../models/covid_info_country.dart';
 
 class CovidInfoViewModel {
-  final _network = NetworkClient("http://192.168.100.7:5004");
+  final _network = NetworkClient("http://192.168.100.9:5004");
 
   final List<CovidInfoCountry> _countries = [
     CovidInfoCountry(
@@ -42,71 +43,26 @@ class CovidInfoViewModel {
     _selectedCountryIndex = index;
   }
 
-  Future<int> fetchCasesCount(String endpoint) async {
-    final result = await _network.request(
+  Future<CovidInfoSummary> fetchSummaryInfo() async {
+    final path = EndpointString.covidInfoBase +
+        _countries[_selectedCountryIndex].endpoint +
+        EndpointString.getSummaryInfo;
+    final response = await _network.request(
       RequestMethod.get,
-      endpoint,
+      path,
       null,
       null,
     );
 
-    if (result == null) return 0;
+    if (response == null) return CovidInfoSummary();
 
-    int count = result.when(success: (data) {
-      return data["result"] ?? 0;
+    final CovidInfoSummary result = response.when(success: (data) {
+      return CovidInfoSummary.fromMap(data);
     }, error: (message) {
-      return 0;
+      return CovidInfoSummary();
     }, loading: (message) {
-      return 0;
+      return CovidInfoSummary();
     });
-    return count;
-  }
-
-  Future<String> getTotalInfectedCases() async {
-    String endpoint = EndpointString.covidInfoBase +
-        _countries[_selectedCountryIndex].endpoint +
-        EndpointString.getTotalInfected;
-    final result = await fetchCasesCount(endpoint);
-    return result.toString();
-  }
-
-  Future<String> getTotalRecoveries() async {
-    String endpoint = EndpointString.covidInfoBase +
-        _countries[_selectedCountryIndex].endpoint +
-        EndpointString.getTotalRecovered;
-    final result = await fetchCasesCount(endpoint);
-    return result.toString();
-  }
-
-  Future<String> getTotalDeaths() async {
-    String endpoint = EndpointString.covidInfoBase +
-        _countries[_selectedCountryIndex].endpoint +
-        EndpointString.getTotalDeath;
-    final result = await fetchCasesCount(endpoint);
-    return result.toString();
-  }
-
-  Future<String> getNewInfectedCases() async {
-    String endpoint = EndpointString.covidInfoBase +
-        _countries[_selectedCountryIndex].endpoint +
-        EndpointString.getTodayInfected;
-    final result = await fetchCasesCount(endpoint);
-    return result.toString();
-  }
-
-  Future<String> getNewRecoveries() async {
-    String endpoint = EndpointString.covidInfoBase +
-        _countries[_selectedCountryIndex].endpoint +
-        EndpointString.getTodayRecovered;
-    final result = await fetchCasesCount(endpoint);
-    return result.toString();
-  }
-
-  Future<String> getNewDeaths() async {
-    String endpoint = EndpointString.covidInfoBase +
-        _countries[_selectedCountryIndex].endpoint +
-        EndpointString.getTodayDeath;
-    final result = await fetchCasesCount(endpoint);
-    return result.toString();
+    return result;
   }
 }
