@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:ducktor/common/local_storage/local_storage_client.dart';
+import 'package:ducktor/common/utilities/message_action_utility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -34,10 +35,12 @@ class ChatbotViewModel {
       }
       log('Client receive: ${response.toString()}');
       final serverMessage = Message(
-          id: UniqueKey().hashCode.toString(),
-          author: Author.server,
-          content: response.content,
-          dateTime: DateTime.now());
+        id: UniqueKey().hashCode.toString(),
+        author: Author.server,
+        content: response.content,
+        dateTime: DateTime.now(),
+        action: MessageActionUtility.getActionByCode(response.actionCode),
+      );
 
       handleSuggestMessages(response.suggestMessages ?? []);
       _chatStream.addResponse([serverMessage]);

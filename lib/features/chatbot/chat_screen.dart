@@ -1,9 +1,8 @@
-import 'dart:io';
-
-import 'package:android_intent_plus/android_intent.dart';
+import 'package:ducktor/common/utilities/message_action_utility.dart';
 import 'package:ducktor/features/chatbot/model/message.dart';
 import 'package:ducktor/features/chatbot/viewmodel/chatbot_viewmodel.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
+import 'package:ducktor/features/covid_info/covid_info_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constants/colors.dart';
@@ -81,7 +80,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           ListView.builder(
                             reverse: true,
                             controller: controller,
-                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 54),
+                            padding: EdgeInsets.fromLTRB(8, 8, 8,
+                                viewModel.suggestMessages.isEmpty ? 24 : 54),
                             physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics(),
                             ),
@@ -129,6 +129,22 @@ class _ChatScreenState extends State<ChatScreen> {
     viewModel.sendMessage(message);
   }
 
+  Function()? getButtonHandlerByAction(MessageAction action) {
+    switch (action) {
+      case MessageAction.none:
+        return null;
+      case MessageAction.getToCovidInfo:
+        return () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CovidInfoScreen(),
+            ),
+          );
+        };
+    }
+  }
+
   MessageBox renderMessageBox(int index) {
     Message message = messages[index];
 
@@ -136,6 +152,8 @@ class _ChatScreenState extends State<ChatScreen> {
       return MessageBox(
         time: message.dateTime.toString(),
         message: messages[index].content,
+        showButton: message.action != MessageAction.none,
+        buttonHandler: getButtonHandlerByAction(message.action),
         // showButton: true,
         // buttonHandler: () async {
         //   double lat = 10.77134;

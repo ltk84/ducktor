@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../../common/utilities/message_action_utility.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 enum Author { server, client }
 
@@ -8,12 +10,15 @@ class Message {
   final Author author;
   final String content;
   final DateTime dateTime;
+  final MessageAction action;
 
-  Message(
-      {required this.id,
-      required this.author,
-      required this.content,
-      required this.dateTime});
+  Message({
+    required this.id,
+    required this.author,
+    required this.content,
+    required this.dateTime,
+    this.action = MessageAction.none,
+  });
 
   bool get isClientMessage => author == Author.client;
 
@@ -23,7 +28,8 @@ class Message {
       'id': id,
       'author': author.index,
       'content': content,
-      'dateTime': dateTime.toString()
+      'dateTime': dateTime.toString(),
+      'action': action.index,
     };
   }
 
@@ -33,6 +39,7 @@ class Message {
       author: map['author'] == 0 ? Author.server : Author.client,
       content: map['content'] ?? '',
       dateTime: DateTime.parse(map['dateTime'] ?? "2001-01-01"),
+      action: MessageActionUtility.getAction(map['action']),
     );
   }
 
