@@ -19,6 +19,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final ScrollController controller = ScrollController();
+  final TextEditingController textController = TextEditingController();
   List<Message> messages = [];
   final viewModel = ChatbotViewModel();
 
@@ -32,6 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     controller.dispose();
+    textController.dispose();
     viewModel.chatStream.dispose();
     super.dispose();
   }
@@ -94,8 +96,16 @@ class _ChatScreenState extends State<ChatScreen> {
                             height: 60,
                             child: ListView.builder(
                               itemCount: viewModel.suggestMessages.length,
-                              itemBuilder: (_, index) => SuggestMessageBox(
-                                  message: viewModel.suggestMessages[index]),
+                              itemBuilder: (_, index) {
+                                String suggestMessage =
+                                    viewModel.suggestMessages[index];
+                                return SuggestMessageBox(
+                                  message: suggestMessage,
+                                  onPressed: () {
+                                    textController.text = suggestMessage;
+                                  },
+                                );
+                              },
                               scrollDirection: Axis.horizontal,
                               padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
                               physics: const BouncingScrollPhysics(
@@ -107,6 +117,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     MessageTextField(
+                      controller: textController,
                       onSendMessage: (message) {
                         handleSendMessage(message);
 

@@ -7,15 +7,15 @@ import '../../../common/constants/strings.dart';
 
 class MessageTextField extends StatelessWidget {
   final Function(String message) onSendMessage;
+  final TextEditingController controller;
   const MessageTextField({
     super.key,
     required this.onSendMessage,
+    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController();
-
     return Container(
       color: AppColor.primary,
       padding: const EdgeInsets.fromLTRB(8, 12, 4, 12),
@@ -56,6 +56,7 @@ class MessageTextField extends StatelessWidget {
               onTap: () {
                 if (controller.text.isNotEmpty) {
                   onSendMessage(controller.text);
+                  controller.text = "";
                 }
               },
               borderRadius: BorderRadius.circular(12.0),
