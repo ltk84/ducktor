@@ -103,7 +103,8 @@ class _MessageBoxState extends State<MessageBox> {
                                   ),
                                 ),
                                 if (widget.showButton)
-                                  SizedBox(
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 4),
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       onPressed: widget.buttonHandler,

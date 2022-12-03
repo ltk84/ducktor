@@ -1,5 +1,6 @@
 import 'package:ducktor/features/covid_info/models/covid_info_summary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../common/constants/assets.dart';
 import '../../../common/constants/strings.dart';
@@ -8,7 +9,13 @@ import '../../../common/networking/networking_constant.dart';
 import '../models/covid_info_country.dart';
 
 class CovidInfoViewModel {
-  final _network = NetworkClient("http://192.168.100.16:5004");
+  late final _network;
+
+  CovidInfoViewModel() {
+    String host = dotenv.env['HOST'] ?? '';
+    String port = dotenv.env['PORT'] ?? '';
+    _network = NetworkClient("http://$host:$port");
+  }
 
   final List<CovidInfoCountry> _countries = [
     CovidInfoCountry(

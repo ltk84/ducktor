@@ -29,8 +29,8 @@ class NetworkClient {
     return _instance;
   }
 
-  late final Uri baseUrl;
-  late final Dio dioClient;
+  late Uri baseUrl;
+  late Dio dioClient;
 
   Future<DucktorResponse?> request<T>(
     RequestMethod method,

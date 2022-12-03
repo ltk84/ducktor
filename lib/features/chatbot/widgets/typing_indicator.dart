@@ -36,6 +36,12 @@ class _TypingIndicatorState extends State<TypingIndicator>
   }
 
   @override
+  void dispose() {
+    _repeatingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Padding(

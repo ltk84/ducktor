@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:ducktor/features/chatbot/model/location_data.dart';
+
 import '../../../common/utilities/message_action_utility.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
@@ -11,6 +13,7 @@ class Message {
   final String content;
   final DateTime dateTime;
   final MessageAction action;
+  final LocationData? extraData;
 
   Message({
     required this.id,
@@ -18,6 +21,7 @@ class Message {
     required this.content,
     required this.dateTime,
     this.action = MessageAction.none,
+    this.extraData,
   });
 
   bool get isClientMessage => author == Author.client;
@@ -30,6 +34,7 @@ class Message {
       'content': content,
       'dateTime': dateTime.toString(),
       'action': action.index,
+      'extraData': extraData?.toMap() ?? {},
     };
   }
 
@@ -40,6 +45,7 @@ class Message {
       content: map['content'] ?? '',
       dateTime: DateTime.parse(map['dateTime'] ?? "2001-01-01"),
       action: MessageActionUtility.getAction(map['action']),
+      extraData: LocationData.fromMap(map['extraData']),
     );
   }
 
