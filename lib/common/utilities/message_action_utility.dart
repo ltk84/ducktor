@@ -7,7 +7,7 @@ enum MessageAction {
 }
 
 class MessageActionUtility {
-  static MessageAction getAction(int index) {
+  static MessageAction getAction(int? index) {
     switch (index) {
       case 1:
         return MessageAction.getToCovidInfo;

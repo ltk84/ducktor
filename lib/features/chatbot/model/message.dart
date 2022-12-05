@@ -45,7 +45,7 @@ class Message {
       content: map['content'] ?? '',
       dateTime: DateTime.parse(map['dateTime'] ?? "2001-01-01"),
       action: MessageActionUtility.getAction(map['action']),
-      extraData: LocationData.fromMap(map['extraData']),
+      extraData: LocationData.fromMap(map['extraData'] ?? {}),
     );
   }
 

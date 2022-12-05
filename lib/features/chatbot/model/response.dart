@@ -20,7 +20,6 @@ class Response {
       this.suggestMessages});
 
   factory Response.fromMap(Map<String, dynamic> map) {
-    print(jsonDecode(map["extra_data"] ?? "{}"));
     return Response(
       intent: map['intent'] ?? '',
       content: map['content'] ?? '',

@@ -43,6 +43,8 @@ class _ChatScreenState extends State<ChatScreen> {
     textController.dispose();
     viewModel.chatStream.dispose();
     viewModel.typingStream.dispose();
+    viewModel.typingStream.dispose();
+    viewModel.ttsClient.dispose();
     super.dispose();
   }
 

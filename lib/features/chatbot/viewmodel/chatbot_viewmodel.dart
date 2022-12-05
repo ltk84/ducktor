@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ducktor/common/local_storage/local_storage_client.dart';
 import 'package:ducktor/common/utilities/message_action_utility.dart';
+import 'package:ducktor/features/chatbot/tts_client.dart';
 import 'package:ducktor/features/chatbot/typing_stream.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,14 @@ class ChatbotViewModel {
   final TypingStream _typingStream = TypingStream();
   final List<String> suggestMessages = [];
   final localStorageClient = LocalStorageClient();
+  late TextToSpeechClient ttsClient;
 
   ChatbotViewModel() {
     String host = dotenv.env['HOST'] ?? '';
     String port = dotenv.env['PORT'] ?? '';
     _socket = io('http://$host:$port/',
         OptionBuilder().setTransports(['websocket']).build());
+    ttsClient = TextToSpeechClient();
   }
 
   ChatStream get chatStream => _chatStream;
@@ -42,6 +45,10 @@ class ChatbotViewModel {
 
     _socket.on('in_progress', (data) {
       _typingStream.addEvent(data);
+    });
+
+    _socket.on('content_for_voice', (data) async {
+      await ttsClient.speak(data);
     });
 
     _socket.on(currentEvent, (data) {
