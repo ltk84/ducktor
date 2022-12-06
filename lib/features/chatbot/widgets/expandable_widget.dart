@@ -32,7 +32,7 @@ class ExpandableWidgetState extends State<ExpandableWidget>
         vsync: this, duration: const Duration(milliseconds: 200));
     animation = CurvedAnimation(
       parent: expandController,
-      curve: Curves.linear,
+      curve: Curves.easeInOut,
     );
   }
 

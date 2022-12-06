@@ -7,11 +7,13 @@ import '../../../common/constants/strings.dart';
 
 class MessageTextField extends StatelessWidget {
   final Function(String message) onSendMessage;
+  final Function()? onMicTap;
   final TextEditingController controller;
   const MessageTextField({
     super.key,
     required this.onSendMessage,
     required this.controller,
+    this.onMicTap,
   });
 
   @override
@@ -50,6 +52,21 @@ class MessageTextField extends StatelessWidget {
           const SizedBox(
             width: 4,
           ),
+          if (onMicTap != null)
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onMicTap,
+                borderRadius: BorderRadius.circular(12.0),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.mic_rounded,
+                    color: AppColor.onPrimary,
+                  ),
+                ),
+              ),
+            ),
           Material(
             color: Colors.transparent,
             child: InkWell(

@@ -5,6 +5,8 @@ import 'package:ducktor/common/utilities/message_action_utility.dart';
 import 'package:ducktor/features/chatbot/model/location_data.dart';
 import 'package:ducktor/features/chatbot/model/message.dart';
 import 'package:ducktor/features/chatbot/viewmodel/chatbot_viewmodel.dart';
+import 'package:ducktor/features/chatbot/widgets/expandable_widget.dart';
+import 'package:ducktor/features/chatbot/widgets/speech_to_text_widget.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:ducktor/features/chatbot/widgets/typing_indicator.dart';
 import 'package:ducktor/features/covid_info/covid_info_screen.dart';
@@ -30,11 +32,17 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Message> messages = [];
   final viewModel = ChatbotViewModel();
 
+  late bool _expandedVoiceBox;
+  late bool _initVoiceBox;
+
   @override
   void initState() {
     super.initState();
     loadChatHistory();
     connectToSocketIO();
+
+    _expandedVoiceBox = false;
+    _initVoiceBox = false;
   }
 
   @override
@@ -129,6 +137,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                         message: suggestMessage,
                                         onPressed: () {
                                           textController.text = suggestMessage;
+                                          textController.selection =
+                                              TextSelection.fromPosition(
+                                            TextPosition(
+                                                offset:
+                                                    textController.text.length),
+                                          );
                                         },
                                       );
                                     },
@@ -155,7 +169,35 @@ class _ChatScreenState extends State<ChatScreen> {
                           duration: const Duration(milliseconds: 300),
                         );
                       },
+                      onMicTap: _expandedVoiceBox
+                          ? null
+                          : () {
+                              setState(() {
+                                if (!_initVoiceBox) {
+                                  _initVoiceBox = true;
+                                }
+                                _expandedVoiceBox = true;
+                              });
+                            },
                     ),
+                    if (_initVoiceBox)
+                      ExpandableWidget(
+                        expand: _expandedVoiceBox,
+                        child: SpeechToTextWidget(
+                          onClose: () {
+                            setState(() {
+                              _expandedVoiceBox = false;
+                            });
+                          },
+                          onResult: (result) {
+                            textController.text = result.recognizedWords;
+                            textController.selection =
+                                TextSelection.fromPosition(
+                              TextPosition(offset: textController.text.length),
+                            );
+                          },
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -219,7 +261,7 @@ class _ChatScreenState extends State<ChatScreen> {
       case MessageAction.getToMap:
         return "See on map";
       case MessageAction.getToLocationSetting:
-        return "Open setting";
+        return "Open Settings";
       default:
         return "Tap here";
     }
