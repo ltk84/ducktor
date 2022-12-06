@@ -1,20 +1,57 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:queue/queue.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TextToSpeechClient {
+  final voiceVolumeKey = 'chatbot-voice-volume';
+  final voicePitchKey = 'chatbot-voice-pitch';
+  final voiceRateKey = 'chatbot-voice-rate';
+
+  static final TextToSpeechClient _instance = TextToSpeechClient._internal();
+  TextToSpeechClient._internal() {
+    // initSharedPreferences();
+    initVoiceAttributes();
+    initTts();
+  }
+
+  late SharedPreferences _preferences;
   late FlutterTts flutterTts;
   String? language;
   String? engine;
-  double volume = 1.0;
-  double pitch = 1.0;
-  double rate = 1.0;
-  bool isCurrentLangugageInstalled = false;
-  final taskQueue = Queue();
+  late double _volume;
+  late double _pitch;
+  late double _rate;
 
-  TextToSpeechClient() {
-    initTts();
+  double get volume => _volume;
+  double get pitch => _pitch;
+  double get rate => _rate;
+
+  void setVolume(double volume) async {
+    _volume = volume;
+    await _preferences.setDouble(voiceVolumeKey, volume);
+  }
+
+  void setPitch(double pitch) async {
+    _pitch = pitch;
+    await _preferences.setDouble(voicePitchKey, pitch);
+  }
+
+  void setRate(double rate) async {
+    _rate = rate;
+    await _preferences.setDouble(voiceRateKey, rate);
+  }
+
+  factory TextToSpeechClient() {
+    return _instance;
+  }
+
+  void initVoiceAttributes() async {
+    _preferences = await SharedPreferences.getInstance();
+    _volume = _preferences.getDouble(voiceVolumeKey) ?? 1.0;
+    _pitch = _preferences.getDouble(voicePitchKey) ?? 1.0;
+    _rate = _preferences.getDouble(voiceRateKey) ?? 0.7;
   }
 
   void initTts() {
@@ -22,6 +59,14 @@ class TextToSpeechClient {
     _setAwaitOptions();
     _getDefaultEngine();
     _getDefaultVoice();
+
+    flutterTts.setInitHandler(() {
+      log('tts inted');
+    });
+
+    flutterTts.setErrorHandler((message) {
+      log(message);
+    });
   }
 
   Future<dynamic> getLanguages() async => await flutterTts.getLanguages;
@@ -37,9 +82,9 @@ class TextToSpeechClient {
   }
 
   Future speak(String content) async {
-    await flutterTts.setVolume(volume);
-    await flutterTts.setSpeechRate(rate);
-    await flutterTts.setPitch(pitch);
+    await flutterTts.setVolume(_volume);
+    await flutterTts.setSpeechRate(_rate);
+    await flutterTts.setPitch(_pitch);
 
     if (content.isNotEmpty) {
       flutterTts.speak(content);

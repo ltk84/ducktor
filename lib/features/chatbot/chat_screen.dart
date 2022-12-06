@@ -10,6 +10,7 @@ import 'package:ducktor/features/chatbot/widgets/speech_to_text_widget.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:ducktor/features/chatbot/widgets/typing_indicator.dart';
 import 'package:ducktor/features/covid_info/covid_info_screen.dart';
+import 'package:ducktor/features/setting/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -81,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 backgroundColor: AppColor.background,
                 appBar: AppBar(
                   backgroundColor: AppColor.background,
-                  elevation: 0.5,
+                  elevation: 3,
                   title: Text(
                     "Ducktor",
                     style: AppTextStyle.semiBold18.copyWith(
@@ -89,6 +90,23 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   centerTitle: true,
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const SettingScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.settings,
+                        color: AppColor.onBackground,
+                      ),
+                    ),
+                  ],
                 ),
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

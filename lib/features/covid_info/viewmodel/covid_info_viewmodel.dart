@@ -9,7 +9,7 @@ import '../../../common/networking/networking_constant.dart';
 import '../models/covid_info_country.dart';
 
 class CovidInfoViewModel {
-  late final _network;
+  late final NetworkClient _network;
 
   CovidInfoViewModel() {
     String host = dotenv.env['HOST'] ?? '';

@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:ducktor/common/constants/colors.dart';
+import 'package:ducktor/common/constants/strings.dart';
 import 'package:ducktor/common/constants/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -28,7 +27,7 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
     super.initState();
     _tryPermit = true;
     _available = false;
-    _statusMessage = 'Please grant microphone permission';
+    _statusMessage = AppString.askGrantPermission;
     _initSpeech();
   }
 
@@ -39,55 +38,49 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
         setState(() {
           switch (status) {
             case "listening":
-              _statusMessage = 'Listening...';
+              _statusMessage = AppString.listening;
               break;
             default:
-              _statusMessage = 'Tap the microphone to start';
+              _statusMessage = AppString.tapMicToStart;
               break;
           }
         })
       },
       onError: (error) => {
-        print(error),
         setState(() {
           switch (error.errorMsg) {
             case "error_speech_timeout":
-              _statusMessage = 'Can\'t hear your voice';
+              _statusMessage = AppString.errorSpeechTimeOut;
               break;
             case "error_no_match":
-              _statusMessage = 'Can\'t recognize what you\'ve said';
+              _statusMessage = AppString.errorNoMatch;
               break;
             case "error_permission":
-              _statusMessage =
-                  'No permission to record, please grant microphone permission in Settings';
+              _available = false;
+              _tryPermit = false;
+              _statusMessage = AppString.askGrantPermissionManually;
               break;
             default:
-              _statusMessage = 'Can\'t recognize your voice';
+              _statusMessage = AppString.voiceErrorDefault;
               break;
           }
         })
       },
     );
 
-    // var locales = await _speechToText.locales();
-
-    // for (LocaleName e in locales) {
-    //   print(e.name + " " + e.localeId);
-    // }
     if (!_available) {
       setState(() {
         if (_tryPermit) {
-          _statusMessage =
-              'No permission to record, please grant microphone permission in Settings';
+          _statusMessage = AppString.askGrantPermissionManually;
           _tryPermit = false;
         } else {
-          _statusMessage = 'Please grant microphone permission';
+          _statusMessage = AppString.askGrantPermission;
           _tryPermit = true;
         }
       });
     } else {
       setState(() {
-        _statusMessage = 'Tap the microphone to start';
+        _statusMessage = AppString.tapMicToStart;
       });
     }
   }
@@ -181,7 +174,7 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
                       } else {
                         openAppSettings();
                         setState(() {
-                          _statusMessage = 'Please grant microphone permission';
+                          _statusMessage = AppString.askGrantPermission;
                           _tryPermit = true;
                         });
                       }
