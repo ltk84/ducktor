@@ -54,6 +54,7 @@ dependencies:
   flutter_local_notifications: ^12.0.4
   flutter_timezone: ^1.0.4
   intl: ^0.18.0
+  page_transition: ^2.0.9
 
 dev_dependencies:
   flutter_test:

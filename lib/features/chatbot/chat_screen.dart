@@ -15,6 +15,7 @@ import 'package:ducktor/features/covid_info/covid_info_screen.dart';
 import 'package:ducktor/features/setting/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/utilities/theme_provider.dart';
@@ -124,9 +125,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () async {
                       bool themeChanged = await Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              const SettingScreen(),
+                        PageTransition(
+                          type: PageTransitionType.rightToLeftWithFade,
+                          child: const SettingScreen(),
                         ),
                       );
                       if (themeChanged) {
@@ -269,8 +270,9 @@ class _ChatScreenState extends State<ChatScreen> {
         return () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const CovidInfoScreen(),
+            PageTransition(
+              type: PageTransitionType.rightToLeftWithFade,
+              child: const CovidInfoScreen(),
             ),
           );
         };

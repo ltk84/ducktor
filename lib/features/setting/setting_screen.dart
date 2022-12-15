@@ -3,6 +3,7 @@ import 'package:ducktor/features/setting/chatbot_voice_setting.dart';
 import 'package:ducktor/features/setting/theme_setting.dart';
 import 'package:ducktor/features/setting/widgets/setting_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../common/constants/styles.dart';
 
@@ -55,9 +56,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute<void>(
-                      builder: (BuildContext context) =>
-                          const ChatbotVoiceSetting(),
+                    PageTransition(
+                      type: PageTransitionType.rightToLeftWithFade,
+                      child: const ChatbotVoiceSetting(),
                     ),
                   );
                 },
@@ -71,8 +72,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 onTap: () async {
                   bool themeChanged = await Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const ThemeSetting(),
+                    PageTransition(
+                      type: PageTransitionType.rightToLeftWithFade,
+                      child: const ThemeSetting(),
                     ),
                   );
                   if (themeChanged) {
