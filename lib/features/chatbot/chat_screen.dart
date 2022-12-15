@@ -35,6 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   late bool _expandedVoiceBox;
   late bool _initVoiceBox;
+  late bool _stateChanged;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
     loadChatHistory();
     connectToSocketIO();
 
+    _stateChanged = false;
     _expandedVoiceBox = false;
     _initVoiceBox = false;
   }
@@ -63,17 +65,21 @@ class _ChatScreenState extends State<ChatScreen> {
       child: StreamBuilder(
           stream: viewModel.chatStream.getResponse,
           builder: (context, AsyncSnapshot<List<Message>> snapshot) {
-            if (snapshot.hasData) {
-              messages.insertAll(
-                  0,
-                  snapshot.data ??
-                      [
-                        Message(
-                            id: UniqueKey().hashCode.toString(),
-                            author: Author.server,
-                            content: '',
-                            dateTime: DateTime.now())
-                      ]);
+            if (!_stateChanged) {
+              if (snapshot.hasData) {
+                messages.insertAll(
+                    0,
+                    snapshot.data ??
+                        [
+                          Message(
+                              id: UniqueKey().hashCode.toString(),
+                              author: Author.server,
+                              content: '',
+                              dateTime: DateTime.now())
+                        ]);
+              }
+            } else {
+              _stateChanged = false;
             }
 
             return GestureDetector(
@@ -195,6 +201,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   _initVoiceBox = true;
                                 }
                                 _expandedVoiceBox = true;
+                                _stateChanged = true;
                               });
                             },
                     ),
@@ -205,6 +212,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           onClose: () {
                             setState(() {
                               _expandedVoiceBox = false;
+                              _stateChanged = true;
                             });
                           },
                           onResult: (result) {
