@@ -1,5 +1,5 @@
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:ducktor/common/constants/colors.dart';
+import 'package:ducktor/common/utilities/theme_provider.dart';
 import 'package:ducktor/common/constants/strings.dart';
 import 'package:ducktor/common/constants/styles.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +89,7 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColor.primary,
+      color: DucktorThemeProvider.primary,
       alignment: Alignment.center,
       child: Stack(
         alignment: AlignmentDirectional.topCenter,
@@ -110,9 +110,9 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
                   borderRadius: BorderRadius.circular(100.0),
                   child: Container(
                     margin: const EdgeInsets.all(10.0),
-                    child: const Icon(
+                    child: Icon(
                       Icons.close_rounded,
-                      color: AppColor.onPrimary,
+                      color: DucktorThemeProvider.onPrimary,
                       size: 24,
                     ),
                   ),
@@ -126,7 +126,7 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
                 padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
                 child: AvatarGlow(
                   animate: _speechToText.isListening,
-                  glowColor: AppColor.onPrimary,
+                  glowColor: DucktorThemeProvider.onPrimary,
                   endRadius: 36.0,
                   duration: const Duration(milliseconds: 2000),
                   repeatPauseDuration: const Duration(milliseconds: 100),
@@ -146,7 +146,7 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
                                   ? Icons.mic_rounded
                                   : Icons.mic_none_rounded)
                               : Icons.mic_off_rounded,
-                          color: AppColor.onPrimary
+                          color: DucktorThemeProvider.onPrimary
                               .withOpacity(_available ? 1.0 : 0.5),
                           size: 36,
                         ),
@@ -161,7 +161,7 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
                   _statusMessage,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.regular16
-                      .copyWith(color: AppColor.onPrimary),
+                      .copyWith(color: DucktorThemeProvider.onPrimary),
                 ),
               ),
               if (!_available)
@@ -180,8 +180,8 @@ class _SpeechToTextWidgetState extends State<SpeechToTextWidget> {
                       }
                     },
                     style: AppButtonStyle.elevated(
-                      backgroundColor: AppColor.background,
-                      foregroundColor: AppColor.onBackground,
+                      backgroundColor: DucktorThemeProvider.background,
+                      foregroundColor: DucktorThemeProvider.onBackground,
                     ),
                     child: Text(_tryPermit ? 'Try again' : 'Open Settings'),
                   ),

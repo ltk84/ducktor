@@ -2,7 +2,7 @@ import 'package:ducktor/features/setting/viewmodel/chatbot_voice_setting_viewmod
 import 'package:ducktor/features/setting/widgets/slider_setting.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/constants/colors.dart';
+import '../../common/utilities/theme_provider.dart';
 import '../../common/constants/styles.dart';
 
 class ChatbotVoiceSetting extends StatefulWidget {
@@ -19,18 +19,19 @@ class _ChatbotVoiceSettingState extends State<ChatbotVoiceSetting> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: DucktorThemeProvider.background,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text(
             "Chatbot Voice",
             style: AppTextStyle.semiBold18.copyWith(
-              color: AppColor.onBackground,
+              color: DucktorThemeProvider.onBackground,
             ),
           ),
           centerTitle: true,
-          leading: const BackButton(
-            color: AppColor.onBackground,
+          leading: BackButton(
+            color: DucktorThemeProvider.onBackground,
           ),
         ),
         body: Column(

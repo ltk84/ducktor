@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../common/constants/assets.dart';
-import '../../../common/constants/colors.dart';
+import '../../../common/utilities/theme_provider.dart';
 
 class TypingIndicator extends StatefulWidget {
   const TypingIndicator({super.key});
@@ -21,9 +21,9 @@ class _TypingIndicatorState extends State<TypingIndicator>
     Interval(0.45, 1.0),
   ];
 
-  final bubbleColor = AppColor.typingDot;
-  final flashingCircleDarkColor = AppColor.flashingCircleDark;
-  final flashingCircleBrightColor = AppColor.flashingCircleBright;
+  final bubbleColor = DucktorThemeProvider.typingDot;
+  final flashingCircleDarkColor = DucktorThemeProvider.flashingCircleDark;
+  final flashingCircleBrightColor = DucktorThemeProvider.flashingCircleBright;
 
   @override
   void initState() {
@@ -50,12 +50,12 @@ class _TypingIndicatorState extends State<TypingIndicator>
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 4),
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
               child: CircleAvatar(
                 radius: 14,
-                backgroundColor: Color(0xfffbd200),
-                backgroundImage: AssetImage(AppAsset.duckFace),
+                backgroundColor: DucktorThemeProvider.ducktorBackground,
+                backgroundImage: const AssetImage(AppAsset.duckFace),
               ),
             ),
             const SizedBox(
@@ -64,7 +64,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
             Container(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
               decoration: BoxDecoration(
-                color: AppColor.messageBoxBackground,
+                color: DucktorThemeProvider.messageBoxBackground,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import '../../../common/constants/colors.dart';
+import '../../../common/utilities/theme_provider.dart';
 import '../../../common/constants/styles.dart';
 import '../../../common/constants/assets.dart';
 import '../widgets/expandable_widget.dart';
@@ -46,12 +47,12 @@ class _MessageBoxState extends State<MessageBox> {
               : MainAxisAlignment.start,
           children: [
             if (!widget.alignRight)
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
                 child: CircleAvatar(
                   radius: 14,
-                  backgroundColor: Color(0xfffbd200),
-                  backgroundImage: AssetImage(AppAsset.duckFace),
+                  backgroundColor: DucktorThemeProvider.ducktorBackground,
+                  backgroundImage: const AssetImage(AppAsset.duckFace),
                 ),
               ),
             if (!widget.alignRight)
@@ -74,12 +75,17 @@ class _MessageBoxState extends State<MessageBox> {
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                      padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
                       decoration: BoxDecoration(
                         color: widget.highlight
-                            ? AppColor.primary
-                            : AppColor.messageBoxBackground,
-                        borderRadius: BorderRadius.circular(12),
+                            ? DucktorThemeProvider.primaryMessageBoxBackground
+                            : DucktorThemeProvider.messageBoxBackground,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(!widget.alignRight ? 8 : 18),
+                          topRight: Radius.circular(widget.alignRight ? 8 : 18),
+                          bottomLeft: const Radius.circular(18),
+                          bottomRight: const Radius.circular(18),
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -97,8 +103,10 @@ class _MessageBoxState extends State<MessageBox> {
                                     widget.message,
                                     style: AppTextStyle.regular16.copyWith(
                                       color: widget.highlight
-                                          ? AppColor.onPrimary
-                                          : AppColor.onMessageBoxBackground,
+                                          ? DucktorThemeProvider
+                                              .onPrimaryMessageBoxBackground
+                                          : DucktorThemeProvider
+                                              .onMessageBoxBackground,
                                     ),
                                   ),
                                 ),
@@ -109,9 +117,9 @@ class _MessageBoxState extends State<MessageBox> {
                                     child: ElevatedButton(
                                       onPressed: widget.buttonHandler,
                                       style: AppButtonStyle.elevated(
-                                        backgroundColor: AppColor
+                                        backgroundColor: DucktorThemeProvider
                                             .buttonOnMessageBoxBackground,
-                                        foregroundColor: AppColor
+                                        foregroundColor: DucktorThemeProvider
                                             .onButtonOnMessageBoxBackground,
                                       ),
                                       child: Text(widget.buttonContent),
@@ -134,9 +142,11 @@ class _MessageBoxState extends State<MessageBox> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
                           child: Text(
-                            widget.time,
+                            DateFormat('kk:mm, dd-MM-yyyy').format(
+                              DateTime.parse(widget.time),
+                            ),
                             style: AppTextStyle.regular12.copyWith(
-                              color: AppColor.onBackgroundLight,
+                              color: DucktorThemeProvider.onBackgroundLight,
                             ),
                           ),
                         ),

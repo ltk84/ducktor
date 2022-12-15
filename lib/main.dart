@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:ducktor/features/reminder/remider_client.dart';
+import 'package:ducktor/common/utilities/theme_provider.dart';
+import 'package:ducktor/features/chatbot/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -27,6 +29,7 @@ Future main() async {
 
   await ReminderClient().init();
 
+  await DucktorThemeProvider.init();
   runApp(const MyApp());
 }
 

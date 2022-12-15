@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../common/constants/assets.dart';
-import '../../../common/constants/colors.dart';
+import '../../../common/utilities/theme_provider.dart';
 import '../../../common/constants/styles.dart';
 import '../../../common/constants/strings.dart';
 
@@ -19,7 +19,7 @@ class MessageTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColor.primary,
+      color: DucktorThemeProvider.primary,
       padding: const EdgeInsets.fromLTRB(8, 12, 4, 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -27,20 +27,20 @@ class MessageTextField extends StatelessWidget {
           Flexible(
             child: TextFormField(
               controller: controller,
-              cursorColor: AppColor.onPrimary,
+              cursorColor: DucktorThemeProvider.onPrimary,
               style: AppTextStyle.regular16.copyWith(
-                color: AppColor.onPrimary,
+                color: DucktorThemeProvider.onPrimary,
               ),
               decoration: InputDecoration(
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(100),
                   borderSide: const BorderSide(
                     style: BorderStyle.none,
                     width: 0,
                   ),
                 ),
                 filled: true,
-                fillColor: AppColor.primaryDark,
+                fillColor: DucktorThemeProvider.primaryDark,
                 contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 isDense: true,
                 hintText: AppString.messageBoxHintText,
@@ -58,11 +58,11 @@ class MessageTextField extends StatelessWidget {
               child: InkWell(
                 onTap: onMicTap,
                 borderRadius: BorderRadius.circular(12.0),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Icon(
                     Icons.mic_rounded,
-                    color: AppColor.onPrimary,
+                    color: DucktorThemeProvider.onPrimary,
                   ),
                 ),
               ),

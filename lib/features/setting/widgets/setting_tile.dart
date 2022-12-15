@@ -1,3 +1,4 @@
+import 'package:ducktor/common/utilities/theme_provider.dart';
 import 'package:ducktor/common/constants/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,8 @@ class SettingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: DucktorThemeProvider.settingTileBackground,
+      borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
         onTap: onTap,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/constants/colors.dart';
+import '../../../common/utilities/theme_provider.dart';
 import '../../../common/constants/styles.dart';
 
 class SuggestMessageBox extends StatelessWidget {
@@ -21,10 +21,10 @@ class SuggestMessageBox extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: AppButtonStyle.suggesstMessage(
-          backgroundColor: AppColor.suggestMessageBoxBackground,
-          foregroundColor: AppColor.onSuggestMessageBoxBackground,
-          overlayColor: AppColor.suggestMessageBoxOverlay,
-          outlineColor: AppColor.suggestMessageBoxOutline,
+          backgroundColor: DucktorThemeProvider.suggestMessageBoxBackground,
+          foregroundColor: DucktorThemeProvider.onSuggestMessageBoxBackground,
+          overlayColor: DucktorThemeProvider.suggestMessageBoxOverlay,
+          outlineColor: DucktorThemeProvider.suggestMessageBoxOutline,
         ),
         child: Text(
           message,

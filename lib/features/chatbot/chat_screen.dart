@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:ducktor/common/constants/assets.dart';
 import 'package:ducktor/common/utilities/message_action_utility.dart';
 import 'package:ducktor/features/chatbot/model/location_data.dart';
 import 'package:ducktor/features/chatbot/model/message.dart';
@@ -15,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../common/constants/colors.dart';
+import '../../common/utilities/theme_provider.dart';
 import '../../common/constants/styles.dart';
 import 'widgets/message_box.dart';
 import 'widgets/message_text_field.dart';
@@ -61,175 +63,199 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: StreamBuilder(
-          stream: viewModel.chatStream.getResponse,
-          builder: (context, AsyncSnapshot<List<Message>> snapshot) {
-            if (!_stateChanged) {
-              if (snapshot.hasData) {
-                messages.insertAll(
-                    0,
-                    snapshot.data ??
-                        [
-                          Message(
-                              id: UniqueKey().hashCode.toString(),
-                              author: Author.server,
-                              content: '',
-                              dateTime: DateTime.now())
-                        ]);
-              }
-            } else {
-              _stateChanged = false;
+    return StreamBuilder(
+        stream: viewModel.chatStream.getResponse,
+        builder: (context, AsyncSnapshot<List<Message>> snapshot) {
+          if (!_stateChanged) {
+            if (snapshot.hasData) {
+              messages.insertAll(
+                  0,
+                  snapshot.data ??
+                      [
+                        Message(
+                            id: UniqueKey().hashCode.toString(),
+                            author: Author.server,
+                            content: '',
+                            dateTime: DateTime.now())
+                      ]);
             }
+          } else {
+            _stateChanged = false;
+          }
 
-            return GestureDetector(
-              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-              child: Scaffold(
-                backgroundColor: AppColor.background,
-                appBar: AppBar(
-                  backgroundColor: AppColor.background,
-                  elevation: 3,
-                  title: Text(
-                    "Ducktor",
-                    style: AppTextStyle.semiBold18.copyWith(
-                      color: AppColor.onBackground,
+          return GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: Scaffold(
+              extendBodyBehindAppBar: true,
+              backgroundColor: DucktorThemeProvider.background,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                toolbarHeight: 80,
+                flexibleSpace: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 36, sigmaY: 36),
+                    child: Container(
+                      color: DucktorThemeProvider.background.withOpacity(0.64),
                     ),
                   ),
-                  centerTitle: true,
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const SettingScreen(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.settings,
-                        color: AppColor.onBackground,
+                ),
+                title: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4, bottom: 4),
+                      child: CircleAvatar(
+                        radius: 14,
+                        backgroundColor: DucktorThemeProvider.ducktorBackground,
+                        backgroundImage: const AssetImage(AppAsset.duckFace),
+                      ),
+                    ),
+                    Text(
+                      "Ducktor",
+                      style: AppTextStyle.semiBold16.copyWith(
+                        color: DucktorThemeProvider.onBackground,
                       ),
                     ),
                   ],
                 ),
-                body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: StreamBuilder<bool>(
-                          stream: viewModel.typingStream.getEvent,
-                          builder: (context, snapshot) {
-                            bool typing = snapshot.data ?? false;
+                centerTitle: true,
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      bool themeChanged = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const SettingScreen(),
+                        ),
+                      );
+                      if (themeChanged) {
+                        setState(() {
+                          _stateChanged = true;
+                        });
+                      }
+                    },
+                    icon: Icon(
+                      Icons.settings,
+                      color: DucktorThemeProvider.onBackground,
+                    ),
+                  ),
+                ],
+              ),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: StreamBuilder<bool>(
+                        stream: viewModel.typingStream.getEvent,
+                        builder: (context, snapshot) {
+                          bool typing = snapshot.data ?? false;
 
-                            return Stack(
-                              alignment: AlignmentDirectional.bottomStart,
-                              children: [
-                                ListView.builder(
-                                  reverse: true,
-                                  controller: controller,
-                                  padding: EdgeInsets.fromLTRB(
-                                      8,
-                                      8,
-                                      8,
-                                      viewModel.suggestMessages.isEmpty
-                                          ? 24
-                                          : 54),
+                          return Stack(
+                            alignment: AlignmentDirectional.bottomStart,
+                            children: [
+                              ListView.builder(
+                                reverse: true,
+                                controller: controller,
+                                padding: EdgeInsets.fromLTRB(
+                                    8,
+                                    8,
+                                    8,
+                                    viewModel.suggestMessages.isEmpty
+                                        ? 24
+                                        : 54),
+                                physics: const BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics(),
+                                ),
+                                itemCount: messages.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index == 0) {
+                                    return Visibility(
+                                      visible: typing,
+                                      child: const TypingIndicator(),
+                                    );
+                                  }
+                                  return renderMessageBox(index - 1);
+                                },
+                              ),
+                              SizedBox(
+                                height: 60,
+                                child: ListView.builder(
+                                  itemCount: viewModel.suggestMessages.length,
+                                  itemBuilder: (_, index) {
+                                    String suggestMessage =
+                                        viewModel.suggestMessages[index];
+                                    return SuggestMessageBox(
+                                      message: suggestMessage,
+                                      onPressed: () {
+                                        textController.text = suggestMessage;
+                                        textController.selection =
+                                            TextSelection.fromPosition(
+                                          TextPosition(
+                                              offset:
+                                                  textController.text.length),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  scrollDirection: Axis.horizontal,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 10, 8, 10),
                                   physics: const BouncingScrollPhysics(
                                     parent: AlwaysScrollableScrollPhysics(),
                                   ),
-                                  itemCount: messages.length + 1,
-                                  itemBuilder: (context, index) {
-                                    if (index == 0) {
-                                      return Visibility(
-                                        visible: typing,
-                                        child: const TypingIndicator(),
-                                      );
-                                    }
-                                    return renderMessageBox(index - 1);
-                                  },
                                 ),
-                                SizedBox(
-                                  height: 60,
-                                  child: ListView.builder(
-                                    itemCount: viewModel.suggestMessages.length,
-                                    itemBuilder: (_, index) {
-                                      String suggestMessage =
-                                          viewModel.suggestMessages[index];
-                                      return SuggestMessageBox(
-                                        message: suggestMessage,
-                                        onPressed: () {
-                                          textController.text = suggestMessage;
-                                          textController.selection =
-                                              TextSelection.fromPosition(
-                                            TextPosition(
-                                                offset:
-                                                    textController.text.length),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    scrollDirection: Axis.horizontal,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 10, 8, 10),
-                                    physics: const BouncingScrollPhysics(
-                                      parent: AlwaysScrollableScrollPhysics(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }),
-                    ),
-                    MessageTextField(
-                      controller: textController,
-                      onSendMessage: (message) {
-                        handleSendMessage(message);
+                              ),
+                            ],
+                          );
+                        }),
+                  ),
+                  MessageTextField(
+                    controller: textController,
+                    onSendMessage: (message) {
+                      handleSendMessage(message);
 
-                        controller.animateTo(
-                          0,
-                          curve: Curves.linear,
-                          duration: const Duration(milliseconds: 300),
-                        );
-                      },
-                      onMicTap: _expandedVoiceBox
-                          ? null
-                          : () {
-                              setState(() {
-                                if (!_initVoiceBox) {
-                                  _initVoiceBox = true;
-                                }
-                                _expandedVoiceBox = true;
-                                _stateChanged = true;
-                              });
-                            },
-                    ),
-                    if (_initVoiceBox)
-                      ExpandableWidget(
-                        expand: _expandedVoiceBox,
-                        child: SpeechToTextWidget(
-                          onClose: () {
+                      controller.animateTo(
+                        0,
+                        curve: Curves.linear,
+                        duration: const Duration(milliseconds: 300),
+                      );
+                    },
+                    onMicTap: _expandedVoiceBox
+                        ? null
+                        : () {
                             setState(() {
-                              _expandedVoiceBox = false;
+                              if (!_initVoiceBox) {
+                                _initVoiceBox = true;
+                              }
+                              _expandedVoiceBox = true;
                               _stateChanged = true;
                             });
                           },
-                          onResult: (result) {
-                            textController.text = result.recognizedWords;
-                            textController.selection =
-                                TextSelection.fromPosition(
-                              TextPosition(offset: textController.text.length),
-                            );
-                          },
-                        ),
+                  ),
+                  if (_initVoiceBox)
+                    ExpandableWidget(
+                      expand: _expandedVoiceBox,
+                      child: SpeechToTextWidget(
+                        onClose: () {
+                          setState(() {
+                            _expandedVoiceBox = false;
+                            _stateChanged = true;
+                          });
+                        },
+                        onResult: (result) {
+                          textController.text = result.recognizedWords;
+                          textController.selection = TextSelection.fromPosition(
+                            TextPosition(offset: textController.text.length),
+                          );
+                        },
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-            );
-          }),
-    );
+            ),
+          );
+        });
   }
 
   void handleSendMessage(String message) {

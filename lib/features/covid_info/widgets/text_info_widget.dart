@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/constants/colors.dart';
+import '../../../common/utilities/theme_provider.dart';
 import '../../../common/constants/styles.dart';
 
 class TextInfoWidget extends StatelessWidget {
@@ -38,7 +38,7 @@ class TextInfoWidget extends StatelessWidget {
           TextSpan(
             text: description,
             style: AppTextStyle.regular12.copyWith(
-              color: AppColor.onBackground,
+              color: DucktorThemeProvider.onBackground,
             ),
           ),
         ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/constants/colors.dart';
+import '../../../common/utilities/theme_provider.dart';
 import '../../../common/constants/styles.dart';
 
 class DatePicker extends StatelessWidget {
@@ -9,7 +9,7 @@ class DatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColor.background,
+      color: DucktorThemeProvider.background,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
@@ -26,9 +26,9 @@ class DatePicker extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.calendar_today_rounded,
-                color: AppColor.onBackground,
+                color: DucktorThemeProvider.onBackground,
                 size: 20,
               ),
               const SizedBox(

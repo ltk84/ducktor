@@ -5,7 +5,7 @@ import 'package:ducktor/features/covid_info/widgets/info_tile.dart';
 import 'package:ducktor/features/covid_info/widgets/text_info_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/constants/colors.dart';
+import '../../common/utilities/theme_provider.dart';
 import '../../common/constants/styles.dart';
 
 class CovidInfoScreen extends StatefulWidget {
@@ -119,7 +119,7 @@ class _CovidInfoScreenState extends State<CovidInfoScreen> {
                         margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                         decoration: BoxDecoration(
-                          color: AppColor.background,
+                          color: DucktorThemeProvider.background,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(

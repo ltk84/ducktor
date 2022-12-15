@@ -70,29 +70,12 @@ class AppButtonStyle {
           }
         },
       ),
-      elevation: MaterialStateProperty.resolveWith<double?>((states) {
-        if (states.contains(MaterialState.pressed)) {
-          return 3;
-        } else {
-          return 2;
-        }
-      }),
-      shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>(
-        (states) {
-          if (states.contains(MaterialState.pressed)) {
-            return RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24.0),
-              side: BorderSide.none,
-            );
-          } else {
-            return RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24.0),
-              side: BorderSide(
-                color: outlineColor,
-              ),
-            );
-          }
-        },
+      elevation: MaterialStateProperty.all(0),
+      shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.0),
+          side: BorderSide.none,
+        ),
       ),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
         (states) {
@@ -137,7 +120,7 @@ class AppButtonStyle {
         if (states.contains(MaterialState.pressed)) {
           return 1;
         } else {
-          return 0.5;
+          return 0;
         }
       }),
       shape: MaterialStateProperty.all(
