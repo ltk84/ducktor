@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DucktorThemeProvider {
   static late SharedPreferences _prefs;
-  static DucktorTheme _theme = DefaultTheme();
+  static DucktorTheme _theme = ducktorThemes[0];
   static int themeIndex = 0;
 
   static Color get primary => _theme.primary;
@@ -39,49 +39,11 @@ class DucktorThemeProvider {
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
     themeIndex = _prefs.getInt('theme') ?? 0;
-    switch (themeIndex) {
-      case 1:
-        _theme = Theme1();
-        break;
-      case 2:
-        _theme = Theme2();
-        break;
-      case 3:
-        _theme = Theme3();
-        break;
-      case 4:
-        _theme = Theme4();
-        break;
-      case 5:
-        _theme = Theme5();
-        break;
-      default:
-        _theme = DefaultTheme();
-        break;
-    }
+    _theme = ducktorThemes[themeIndex];
   }
 
   static void changeTheme(index) {
-    switch (index) {
-      case 1:
-        _theme = Theme1();
-        break;
-      case 2:
-        _theme = Theme2();
-        break;
-      case 3:
-        _theme = Theme3();
-        break;
-      case 4:
-        _theme = Theme4();
-        break;
-      case 5:
-        _theme = Theme5();
-        break;
-      default:
-        _theme = DefaultTheme();
-        break;
-    }
+    _theme = ducktorThemes[index];
     DucktorThemeProvider.themeIndex = index;
     _prefs.setInt('theme', index);
   }

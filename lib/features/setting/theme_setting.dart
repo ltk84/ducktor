@@ -1,3 +1,4 @@
+import 'package:ducktor/common/constants/themes.dart';
 import 'package:ducktor/common/utilities/theme_provider.dart';
 import 'package:ducktor/common/constants/styles.dart';
 import 'package:ducktor/features/setting/viewmodel/theme_setting_viewmodel.dart';
@@ -45,10 +46,10 @@ class _ThemeSettingState extends State<ThemeSetting> {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: ThemeTile(
-                  label: viewModel.themes[index].name,
-                  primary: viewModel.themes[index].primary,
-                  background: viewModel.themes[index].background,
-                  onPrimary: viewModel.themes[index].onPrimary,
+                  label: ducktorThemes[index].name,
+                  primary: ducktorThemes[index].primary,
+                  background: ducktorThemes[index].background,
+                  onPrimary: ducktorThemes[index].onPrimary,
                   onTap: () {
                     setState(() {
                       viewModel.changeTheme(index);
