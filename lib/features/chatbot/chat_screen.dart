@@ -12,6 +12,8 @@ import 'package:ducktor/features/chatbot/widgets/speech_to_text_widget.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:ducktor/features/chatbot/widgets/typing_indicator.dart';
 import 'package:ducktor/features/covid_info/covid_info_screen.dart';
+import 'package:ducktor/features/reminder/remider_client.dart';
+import 'package:ducktor/features/reminder/widgets/reminder_setting_dialog.dart';
 import 'package:ducktor/features/setting/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -31,6 +33,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final remiderClient = ReminderClient();
+
   final ScrollController controller = ScrollController();
   final TextEditingController textController = TextEditingController();
   List<Message> messages = [];
@@ -49,6 +53,11 @@ class _ChatScreenState extends State<ChatScreen> {
     _stateChanged = false;
     _expandedVoiceBox = false;
     _initVoiceBox = false;
+
+    remiderClient.isAndroidPermissionGranted();
+    remiderClient.requestPermission();
+    remiderClient.configureDidReceiveLocalNotificationSubject();
+    remiderClient.configureSelectNotificationSubject();
   }
 
   @override
@@ -305,6 +314,18 @@ class _ChatScreenState extends State<ChatScreen> {
         return () {
           Geolocator.openLocationSettings();
         };
+      case MessageAction.openReminderSetting:
+        return () async {
+          final result = await showDialog(
+            context: context,
+            builder: ((context) => const ReminderSettingDialog()),
+          );
+          await remiderClient.createReminder(
+            title: result['title'],
+            body: result['message'],
+            setting: result['setting'],
+          );
+        };
       default:
         return null;
     }
@@ -316,6 +337,8 @@ class _ChatScreenState extends State<ChatScreen> {
         return "See on map";
       case MessageAction.getToLocationSetting:
         return "Open Settings";
+      case MessageAction.openReminderSetting:
+        return "Set Reminder";
       default:
         return "Tap here";
     }

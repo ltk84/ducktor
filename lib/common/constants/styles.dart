@@ -93,6 +93,7 @@ class AppButtonStyle {
     required Color backgroundColor,
     required Color foregroundColor,
     Color overlayColor = const Color.fromARGB(255, 227, 227, 227),
+    double radius = 16.0,
   }) {
     return ButtonStyle(
       textStyle: MaterialStatePropertyAll<TextStyle?>(
@@ -125,7 +126,7 @@ class AppButtonStyle {
       }),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(radius),
           side: BorderSide.none,
         ),
       ),
@@ -138,6 +139,33 @@ class AppButtonStyle {
           }
         },
       ),
+    );
+  }
+
+  static ButtonStyle text({
+    required Color foregroundColor,
+    Color overlayColor = const Color.fromARGB(50, 227, 227, 227),
+  }) {
+    return ButtonStyle(
+      textStyle: MaterialStatePropertyAll<TextStyle?>(
+        AppTextStyle.semiBold16,
+      ),
+      foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return foregroundColor.withOpacity(0.8);
+          } else {
+            return foregroundColor;
+          }
+        },
+      ),
+      shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          side: BorderSide.none,
+        ),
+      ),
+      overlayColor: MaterialStateProperty.all(overlayColor),
     );
   }
 }

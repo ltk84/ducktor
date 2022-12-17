@@ -3,7 +3,8 @@ enum MessageAction {
   getToCovidInfo,
   askForPosition,
   getToMap,
-  getToLocationSetting
+  getToLocationSetting,
+  openReminderSetting,
 }
 
 class MessageActionUtility {
@@ -17,6 +18,8 @@ class MessageActionUtility {
         return MessageAction.getToMap;
       case 4:
         return MessageAction.getToLocationSetting;
+      case 5:
+        return MessageAction.openReminderSetting;
       default:
         return MessageAction.none;
     }
@@ -32,6 +35,8 @@ class MessageActionUtility {
         return MessageAction.getToMap;
       case "0004":
         return MessageAction.getToLocationSetting;
+      case "0005":
+        return MessageAction.openReminderSetting;
       default:
         return MessageAction.none;
     }
