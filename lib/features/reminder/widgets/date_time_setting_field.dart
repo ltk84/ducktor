@@ -65,6 +65,7 @@ class DateTimeSettingField extends StatelessWidget {
                 ),
               ),
               child: CupertinoDatePicker(
+                key: UniqueKey(),
                 mode: mode,
                 initialDateTime: initialDateTime,
                 use24hFormat: use24hFormat,

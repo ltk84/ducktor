@@ -9,6 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../remider_client.dart';
+
 class ReminderSettingDialog extends StatefulWidget {
   const ReminderSettingDialog({super.key});
 
@@ -108,6 +110,11 @@ class _ReminderSettingDialogState extends State<ReminderSettingDialog> {
                       onSelectedItemChanged: (index) {
                         setState(() {
                           _selectedFrequencyIndex = index;
+                          final untilDate = _calculateUntilDate();
+                          if (_endDate == null ||
+                              _endDate!.isBefore(untilDate)) {
+                            _endDate = untilDate;
+                          }
                         });
                       },
                       itemCount: Frequency.values.length,
@@ -137,6 +144,11 @@ class _ReminderSettingDialogState extends State<ReminderSettingDialog> {
                       onSelectedItemChanged: (index) {
                         setState(() {
                           _freqNum = index + 1;
+                          final untilDate = _calculateUntilDate();
+                          if (_endDate == null ||
+                              _endDate!.isBefore(untilDate)) {
+                            _endDate = untilDate;
+                          }
                         });
                       },
                       itemBuilder: (context, index) {
@@ -184,18 +196,15 @@ class _ReminderSettingDialogState extends State<ReminderSettingDialog> {
                   children: [
                     DateTimeSettingField(
                       title: 'Until',
-                      display: _endDate == null
+                      display: _endDate == null || _endOption != 0
                           ? ''
                           : DateFormat('dd/MM/yyyy').format(_endDate!),
                       expand: _expandIndex == 3,
                       selected: _endOption == 0,
                       mode: CupertinoDatePickerMode.date,
-                      initialDateTime: _time.add(
-                        const Duration(days: 1, seconds: 1),
-                      ),
-                      minimumDate: _time.add(
-                        const Duration(days: 1),
-                      ),
+                      initialDateTime: _endDate ??
+                          _calculateUntilDate().add(const Duration(seconds: 1)),
+                      minimumDate: DateUtils.dateOnly(_calculateUntilDate()),
                       onTap: () {
                         setState(() {
                           if (_expandIndex == 3) {
@@ -205,14 +214,16 @@ class _ReminderSettingDialogState extends State<ReminderSettingDialog> {
 
                             _endOption = 0;
                             _repeatTime = null;
-                            _endDate = DateTime.now().add(
-                              const Duration(days: 1),
-                            );
+                            _endDate ??= _calculateUntilDate();
                           }
                         });
                       },
                       onDateTimeChanged: (val) {
                         setState(() {
+                          if (val.isBefore(
+                              DateUtils.dateOnly(_calculateUntilDate()))) {
+                            return;
+                          }
                           _endDate = val;
                         });
                       },
@@ -291,7 +302,9 @@ class _ReminderSettingDialogState extends State<ReminderSettingDialog> {
                             frequency:
                                 Frequency.values[_selectedFrequencyIndex],
                             freqNum: _freqNum,
-                            fromDate: _time,
+                            fromDate: _time.isBefore(DateTime.now())
+                                ? _calculateUntilDate()
+                                : _time,
                             toDate: _endDate,
                             times: _repeatTime,
                           ),
@@ -311,6 +324,22 @@ class _ReminderSettingDialogState extends State<ReminderSettingDialog> {
         ),
       ),
     );
+  }
+
+  DateTime _calculateUntilDate() {
+    switch (Frequency.values[_selectedFrequencyIndex]) {
+      case Frequency.daily:
+        final date = _time.add(Duration(days: _freqNum));
+        return date;
+      case Frequency.weekly:
+        return _time.add(Duration(days: 7 * _freqNum));
+      case Frequency.monthly:
+        int days = DateUtils.getDaysInMonth(_time.month, _time.year) * _freqNum;
+        return _time.add(Duration(days: days));
+      case Frequency.yearly:
+        int days = isLeapYear(_time.year) ? 365 : 366;
+        return _time.add(Duration(days: days));
+    }
   }
 
   String getFreqUnit(int freqIndex) {

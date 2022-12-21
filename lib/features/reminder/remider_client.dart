@@ -168,11 +168,12 @@ class ReminderClient {
     } else {
       final timeline = _createDailyTimeline(setting);
       for (var date in timeline) {
-        await flutterLocalNotificationsPlugin.zonedSchedule(
-            0, title, body, date, notificationDetail,
-            androidAllowWhileIdle: true,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime);
+        await flutterLocalNotificationsPlugin
+            .zonedSchedule(0, title, body, date, notificationDetail,
+                androidAllowWhileIdle: true,
+                uiLocalNotificationDateInterpretation:
+                    UILocalNotificationDateInterpretation.absoluteTime)
+            .then((value) => print('done'));
       }
     }
   }

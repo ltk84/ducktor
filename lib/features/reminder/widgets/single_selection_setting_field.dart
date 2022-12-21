@@ -1,7 +1,6 @@
 import 'package:ducktor/common/constants/styles.dart';
 import 'package:ducktor/common/utilities/theme_provider.dart';
 import 'package:ducktor/features/chatbot/widgets/expandable_widget.dart';
-import 'package:ducktor/features/reminder/model/reminder_setting.dart';
 import 'package:ducktor/features/reminder/widgets/option_display.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -60,6 +59,7 @@ class SingleSelectionSettingField extends StatelessWidget {
                 ),
               ),
               child: CupertinoPicker.builder(
+                key: UniqueKey(),
                 childCount: itemCount,
                 itemExtent: 30,
                 scrollController:
