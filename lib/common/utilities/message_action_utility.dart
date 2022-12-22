@@ -5,6 +5,7 @@ enum MessageAction {
   getToMap,
   getToLocationSetting,
   openReminderSetting,
+  openNotiReminderList,
 }
 
 class MessageActionUtility {
@@ -20,6 +21,8 @@ class MessageActionUtility {
         return MessageAction.getToLocationSetting;
       case 5:
         return MessageAction.openReminderSetting;
+      case 6:
+        return MessageAction.openNotiReminderList;
       default:
         return MessageAction.none;
     }
@@ -37,6 +40,8 @@ class MessageActionUtility {
         return MessageAction.getToLocationSetting;
       case "0005":
         return MessageAction.openReminderSetting;
+      case "0006":
+        return MessageAction.openNotiReminderList;
       default:
         return MessageAction.none;
     }

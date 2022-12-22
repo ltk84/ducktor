@@ -141,6 +141,21 @@ class ChatbotViewModel {
     await localStorageClient.writeToChatHistoryFile(newMessage);
   }
 
+  void sendServerMessage(String message,
+      {MessageAction action = MessageAction.none}) async {
+    final serverMessage = Message(
+      id: UniqueKey().hashCode.toString(),
+      author: Author.server,
+      content: message,
+      dateTime: DateTime.now(),
+      action: action,
+    );
+    _chatStream.addResponse([serverMessage]);
+    handleSuggestMessages([]);
+    saveNewMessageToChatHistory(serverMessage.toJson());
+    await ttsClient.speak(message);
+  }
+
   void addReminderInfo(
     String title,
     String message,

@@ -22,7 +22,7 @@ class ReminderTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: DucktorThemeProvider.settingTileBackground,
+      color: DucktorThemeProvider.reminderTileBackground,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
@@ -39,11 +39,11 @@ class ReminderTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    title.isEmpty ? '(empty title)' : title,
                     style: AppTextStyle.semiBold16,
                   ),
                   Text(
-                    message,
+                    message.isEmpty ? '(empty message)' : message,
                     style: AppTextStyle.regular12,
                   ),
                 ],

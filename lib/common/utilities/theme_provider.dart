@@ -35,6 +35,7 @@ class DucktorThemeProvider {
   static Color get flashingCircleBright => _theme.flashingCircleBright;
   static Color get ducktorBackground => _theme.ducktorBackground;
   static Color get settingTileBackground => _theme.settingTileBackground;
+  static Color get reminderTileBackground => _theme.reminderTileBackground;
 
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();

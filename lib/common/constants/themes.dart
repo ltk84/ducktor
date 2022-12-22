@@ -33,6 +33,7 @@ abstract class DucktorTheme {
   late Color flashingCircleBright;
   late Color ducktorBackground;
   late Color settingTileBackground;
+  late Color reminderTileBackground;
 }
 
 class DefaultTheme extends DucktorTheme {
@@ -60,6 +61,7 @@ class DefaultTheme extends DucktorTheme {
     flashingCircleBright = const Color.fromARGB(255, 238, 238, 238);
     ducktorBackground = const Color(0xfffbd200);
     settingTileBackground = const Color(0xffffffff);
+    reminderTileBackground = const Color.fromARGB(255, 244, 244, 244);
   }
 }
 
@@ -87,6 +89,7 @@ class Theme1 extends DucktorTheme {
     flashingCircleBright = const Color.fromARGB(255, 238, 238, 238);
     ducktorBackground = const Color.fromARGB(255, 239, 89, 134);
     settingTileBackground = const Color(0xffffffff);
+    reminderTileBackground = const Color(0xffffffff);
   }
 }
 
@@ -114,6 +117,7 @@ class Theme2 extends DucktorTheme {
     flashingCircleBright = const Color.fromARGB(255, 238, 238, 238);
     ducktorBackground = primaryDark;
     settingTileBackground = const Color(0xffffffff);
+    reminderTileBackground = const Color(0xffffffff);
   }
 }
 
@@ -141,6 +145,7 @@ class Theme3 extends DucktorTheme {
     flashingCircleBright = const Color.fromARGB(255, 238, 238, 238);
     ducktorBackground = primaryDark;
     settingTileBackground = const Color(0xffffffff);
+    reminderTileBackground = const Color(0xffffffff);
   }
 }
 
@@ -168,6 +173,7 @@ class Theme4 extends DucktorTheme {
     flashingCircleBright = const Color.fromARGB(255, 238, 238, 238);
     ducktorBackground = primaryDark;
     settingTileBackground = const Color(0xffffffff);
+    reminderTileBackground = const Color(0xffffffff);
   }
 }
 
@@ -195,5 +201,6 @@ class Theme5 extends DucktorTheme {
     flashingCircleBright = const Color.fromARGB(255, 238, 238, 238);
     ducktorBackground = const Color.fromARGB(255, 88, 88, 73);
     settingTileBackground = const Color.fromARGB(255, 242, 242, 222);
+    reminderTileBackground = const Color.fromARGB(255, 242, 242, 222);
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -13,11 +14,13 @@ import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:ducktor/features/chatbot/widgets/typing_indicator.dart';
 import 'package:ducktor/features/covid_info/covid_info_screen.dart';
 import 'package:ducktor/features/reminder/reminder_client.dart';
+import 'package:ducktor/features/reminder/model/reminder_setting.dart';
 import 'package:ducktor/features/reminder/reminder_screen.dart';
 import 'package:ducktor/features/reminder/widgets/reminder_setting_dialog.dart';
 import 'package:ducktor/features/setting/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -352,7 +355,24 @@ class _ChatScreenState extends State<ChatScreen> {
 
             viewModel.addReminderInfo(
                 result['title'], result['message'], result['setting']);
+
+            DateTime beginDate =
+                (result['setting'] as ReminderSetting).fromDate;
+            viewModel.sendServerMessage(
+              'Reminder for "${result['title']}" has been set successfully! The next notification will be at ${DateFormat('HH:mm').format(beginDate)} on ${DateFormat('dd-MM-yyyy').format(beginDate)}. You can check the full notification list here.',
+              action: MessageAction.openNotiReminderList,
+            );
           }
+        };
+      case MessageAction.openNotiReminderList:
+        return () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.rightToLeftWithFade,
+              child: ReminderScreen(),
+            ),
+          );
         };
       default:
         return null;

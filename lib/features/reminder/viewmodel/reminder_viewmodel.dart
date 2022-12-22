@@ -13,7 +13,7 @@ class ReminderViewModel {
 
         reminderInfo.removeWhere(
             (element) => element.dateTime.isBefore(DateTime.now()));
-
+        reminderInfo.sort((a, b) => a.dateTime.compareTo(b.dateTime));
         prefs.setStringList(
             'reminders', reminderInfo.map((e) => e.toJson()).toList());
         return reminderInfo;

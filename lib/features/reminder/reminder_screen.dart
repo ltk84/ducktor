@@ -45,7 +45,7 @@ class ReminderScreen extends StatelessWidget {
                         parent: AlwaysScrollableScrollPhysics()),
                     itemCount: reminderInfo.length,
                     itemBuilder: ((context, index) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
+                          padding: const EdgeInsets.only(bottom: 12.0),
                           child: ReminderTile(
                             title: reminderInfo[index].title,
                             message: reminderInfo[index].message,
