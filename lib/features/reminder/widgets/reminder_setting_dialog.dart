@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../remider_client.dart';
+import '../reminder_client.dart';
 
 class ReminderSettingDialog extends StatefulWidget {
   const ReminderSettingDialog({super.key});

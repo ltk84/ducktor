@@ -57,6 +57,8 @@ dependencies:
   page_transition: ^2.0.9
 
 dev_dependencies:
+  change_app_package_name: ^1.1.0
+  flutter_launcher_icons: "^0.11.0"
   flutter_test:
     sdk: flutter
 
@@ -72,6 +74,12 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/ducktor_icon.jpg"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/ducktor_icon.jpg"
 
 # The following section is specific to Flutter packages.
 flutter:
