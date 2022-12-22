@@ -287,7 +287,7 @@ class ReminderClient {
 
   List<tz.TZDateTime> _createMonthlyTimeline(ReminderSetting setting) {
     int days = DateUtils.getDaysInMonth(
-            setting.fromDate.month, setting.fromDate.year) *
+            setting.fromDate.year, setting.fromDate.month) *
         setting.freqNum;
     final timeline = <tz.TZDateTime>[];
     if (setting.toDate != null) {

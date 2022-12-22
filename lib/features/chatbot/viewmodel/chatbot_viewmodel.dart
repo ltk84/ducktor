@@ -4,10 +4,13 @@ import 'package:ducktor/common/local_storage/local_storage_client.dart';
 import 'package:ducktor/common/utilities/message_action_utility.dart';
 import 'package:ducktor/features/chatbot/tts_client.dart';
 import 'package:ducktor/features/chatbot/typing_stream.dart';
+import 'package:ducktor/features/reminder/model/reminder_info.dart';
+import 'package:ducktor/features/reminder/model/reminder_setting.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../chat_stream.dart';
@@ -136,5 +139,74 @@ class ChatbotViewModel {
 
   Future<void> saveNewMessageToChatHistory(String newMessage) async {
     await localStorageClient.writeToChatHistoryFile(newMessage);
+  }
+
+  void addReminderInfo(
+    String title,
+    String message,
+    ReminderSetting setting,
+  ) async {
+    List<DateTime> dates = [setting.fromDate];
+
+    // Calculate noti-reminder dates
+    if (setting.toDate == null) {
+      int timeCount = setting.times!;
+      var currentTime = setting.fromDate;
+      while (timeCount != 0) {
+        currentTime =
+            currentTime.add(Duration(days: countFreq(setting, currentTime)));
+        dates.add(currentTime);
+        timeCount--;
+      }
+    } else if (setting.times == null) {
+      var currentTime = setting.fromDate;
+      while (true) {
+        currentTime =
+            currentTime.add(Duration(days: countFreq(setting, currentTime)));
+        if (!currentTime.isAfter(setting.toDate!)) {
+          dates.add(currentTime);
+        } else {
+          break;
+        }
+      }
+    }
+
+    // Save noti-reminder dates
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<ReminderInfo> reminderInfo = prefs
+            .getStringList('reminders')
+            ?.map((e) => ReminderInfo.fromJson(e))
+            .toList() ??
+        [];
+
+    reminderInfo.addAll(dates
+        .map((e) => ReminderInfo(title: title, message: message, dateTime: e)));
+    prefs.setStringList(
+        'reminders', reminderInfo.map((e) => e.toJson()).toList());
+  }
+
+  int countFreq(ReminderSetting setting, DateTime currentTime) {
+    int freq;
+
+    switch (setting.frequency) {
+      case Frequency.daily:
+        freq = setting.freqNum;
+        break;
+      case Frequency.weekly:
+        freq = 7 * setting.freqNum;
+        break;
+      case Frequency.monthly:
+        int dayOfMonth =
+            DateTime(currentTime.year, currentTime.month + 1, 0).day;
+        freq = dayOfMonth * setting.freqNum;
+        break;
+      case Frequency.yearly:
+        bool isLeap = DateTime(currentTime.year, 3, 0).day == 29;
+        int dayOfYear = isLeap ? 366 : 365;
+        freq = dayOfYear * setting.freqNum;
+        break;
+    }
+
+    return freq;
   }
 }

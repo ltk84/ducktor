@@ -13,6 +13,7 @@ import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:ducktor/features/chatbot/widgets/typing_indicator.dart';
 import 'package:ducktor/features/covid_info/covid_info_screen.dart';
 import 'package:ducktor/features/reminder/reminder_client.dart';
+import 'package:ducktor/features/reminder/reminder_screen.dart';
 import 'package:ducktor/features/reminder/widgets/reminder_setting_dialog.dart';
 import 'package:ducktor/features/setting/setting_screen.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +131,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 centerTitle: true,
                 actions: [
+                  IconButton(
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeftWithFade,
+                          child: ReminderScreen(),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.schedule_rounded,
+                      color: DucktorThemeProvider.onBackground,
+                    ),
+                  ),
                   IconButton(
                     onPressed: () async {
                       bool themeChanged = await Navigator.push(
@@ -327,11 +343,16 @@ class _ChatScreenState extends State<ChatScreen> {
             context: context,
             builder: ((context) => const ReminderSettingDialog()),
           );
-          await remiderClient.createReminder(
-            title: result['title'],
-            body: result['message'],
-            setting: result['setting'],
-          );
+          if (result != null) {
+            await remiderClient.createReminder(
+              title: result['title'],
+              body: result['message'],
+              setting: result['setting'],
+            );
+
+            viewModel.addReminderInfo(
+                result['title'], result['message'], result['setting']);
+          }
         };
       default:
         return null;

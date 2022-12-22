@@ -334,7 +334,7 @@ class _ReminderSettingDialogState extends State<ReminderSettingDialog> {
       case Frequency.weekly:
         return _time.add(Duration(days: 7 * _freqNum));
       case Frequency.monthly:
-        int days = DateUtils.getDaysInMonth(_time.month, _time.year) * _freqNum;
+        int days = DateUtils.getDaysInMonth(_time.year, _time.month) * _freqNum;
         return _time.add(Duration(days: days));
       case Frequency.yearly:
         int days = isLeapYear(_time.year) ? 365 : 366;
