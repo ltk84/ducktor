@@ -52,7 +52,7 @@ class ReminderClient {
         await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('ducktor_icon');
+        AndroidInitializationSettings('ic_duck_face');
 
     const InitializationSettings initializationSettings =
         InitializationSettings(

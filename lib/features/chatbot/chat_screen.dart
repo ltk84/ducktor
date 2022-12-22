@@ -12,7 +12,7 @@ import 'package:ducktor/features/chatbot/widgets/speech_to_text_widget.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:ducktor/features/chatbot/widgets/typing_indicator.dart';
 import 'package:ducktor/features/covid_info/covid_info_screen.dart';
-import 'package:ducktor/features/reminder/remider_client.dart';
+import 'package:ducktor/features/reminder/reminder_client.dart';
 import 'package:ducktor/features/reminder/widgets/reminder_setting_dialog.dart';
 import 'package:ducktor/features/setting/setting_screen.dart';
 import 'package:flutter/material.dart';
@@ -198,7 +198,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                     return SuggestMessageBox(
                                       message: suggestMessage,
                                       onPressed: () {
-                                        textController.text = suggestMessage;
+                                        final currentText = textController.text;
+                                        if (currentText.endsWith(' ')) {
+                                          textController.text +=
+                                              '$suggestMessage ';
+                                        } else {
+                                          textController.text =
+                                              '$suggestMessage ';
+                                        }
                                         textController.selection =
                                             TextSelection.fromPosition(
                                           TextPosition(
