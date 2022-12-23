@@ -159,33 +159,8 @@ class ChatbotViewModel {
   void addReminderInfo(
     String title,
     String message,
-    ReminderSetting setting,
+    List<DateTime> dates,
   ) async {
-    List<DateTime> dates = [setting.fromDate];
-
-    // Calculate noti-reminder dates
-    if (setting.toDate == null) {
-      int timeCount = setting.times!;
-      var currentTime = setting.fromDate;
-      while (timeCount != 0) {
-        currentTime =
-            currentTime.add(Duration(days: countFreq(setting, currentTime)));
-        dates.add(currentTime);
-        timeCount--;
-      }
-    } else if (setting.times == null) {
-      var currentTime = setting.fromDate;
-      while (true) {
-        currentTime =
-            currentTime.add(Duration(days: countFreq(setting, currentTime)));
-        if (!currentTime.isAfter(setting.toDate!)) {
-          dates.add(currentTime);
-        } else {
-          break;
-        }
-      }
-    }
-
     // Save noti-reminder dates
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<ReminderInfo> reminderInfo = prefs
@@ -194,34 +169,10 @@ class ChatbotViewModel {
             .toList() ??
         [];
 
-    reminderInfo.addAll(dates
-        .map((e) => ReminderInfo(title: title, message: message, dateTime: e)));
+    reminderInfo.addAll(dates.map((e) {
+      return ReminderInfo(title: title, message: message, dateTime: e);
+    }));
     prefs.setStringList(
         'reminders', reminderInfo.map((e) => e.toJson()).toList());
-  }
-
-  int countFreq(ReminderSetting setting, DateTime currentTime) {
-    int freq;
-
-    switch (setting.frequency) {
-      case Frequency.daily:
-        freq = setting.freqNum;
-        break;
-      case Frequency.weekly:
-        freq = 7 * setting.freqNum;
-        break;
-      case Frequency.monthly:
-        int dayOfMonth =
-            DateTime(currentTime.year, currentTime.month + 1, 0).day;
-        freq = dayOfMonth * setting.freqNum;
-        break;
-      case Frequency.yearly:
-        bool isLeap = DateTime(currentTime.year, 3, 0).day == 29;
-        int dayOfYear = isLeap ? 366 : 365;
-        freq = dayOfYear * setting.freqNum;
-        break;
-    }
-
-    return freq;
   }
 }

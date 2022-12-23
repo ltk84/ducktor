@@ -136,109 +136,80 @@ class ReminderClient {
     });
   }
 
-  Future createReminder(
+  Future<List<DateTime>> createReminder(
       {String title = '',
       String body = '',
       required ReminderSetting setting}) async {
     switch (setting.frequency) {
       case Frequency.daily:
-        _createReminderDaily(title, body, setting);
-        break;
+        return _createReminderDaily(title, body, setting);
       case Frequency.weekly:
-        _createReminderWeekly(title, body, setting);
-        break;
+        return _createReminderWeekly(title, body, setting);
       case Frequency.monthly:
-        _createReminderMonthly(title, body, setting);
-        break;
+        return _createReminderMonthly(title, body, setting);
       case Frequency.yearly:
-        _createReminderYearly(title, body, setting);
-        break;
+        return _createReminderYearly(title, body, setting);
     }
   }
 
-  Future _createReminderDaily(
+  Future<List<DateTime>> _createReminderDaily(
       String title, String body, ReminderSetting setting) async {
-    if (setting.freqNum == 1) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(0, title, body,
-          tz.TZDateTime.from(setting.fromDate, tz.local), notificationDetail,
+    final timeline = _createDailyTimeline(setting);
+    for (var date in timeline) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          0, title, body, date, notificationDetail,
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          matchDateTimeComponents: DateTimeComponents.time);
-    } else {
-      final timeline = _createDailyTimeline(setting);
-      for (var date in timeline) {
-        await flutterLocalNotificationsPlugin
-            .zonedSchedule(0, title, body, date, notificationDetail,
-                androidAllowWhileIdle: true,
-                uiLocalNotificationDateInterpretation:
-                    UILocalNotificationDateInterpretation.absoluteTime)
-            .then((value) => print('done'));
-      }
+              UILocalNotificationDateInterpretation.absoluteTime);
     }
+    return timeline
+        .map((e) => DateTime(e.year, e.month, e.day, e.hour, e.minute))
+        .toList();
   }
 
-  Future _createReminderWeekly(
+  Future<List<DateTime>> _createReminderWeekly(
       String title, String body, ReminderSetting setting) async {
-    if (setting.freqNum == 1) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(0, title, body,
-          tz.TZDateTime.from(setting.fromDate, tz.local), notificationDetail,
+    final timeline = _createWeeklyTimeline(setting);
+    for (var date in timeline) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          0, title, body, date, notificationDetail,
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
-    } else {
-      final timeline = _createWeeklyTimeline(setting);
-      for (var date in timeline) {
-        await flutterLocalNotificationsPlugin.zonedSchedule(
-            0, title, body, date, notificationDetail,
-            androidAllowWhileIdle: true,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime);
-      }
+              UILocalNotificationDateInterpretation.absoluteTime);
     }
+    return timeline
+        .map((e) => DateTime(e.year, e.month, e.day, e.hour, e.minute))
+        .toList();
   }
 
-  Future _createReminderMonthly(
+  Future<List<DateTime>> _createReminderMonthly(
       String title, String body, ReminderSetting setting) async {
-    if (setting.freqNum == 1) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(0, title, body,
-          tz.TZDateTime.from(setting.fromDate, tz.local), notificationDetail,
+    final timeline = _createMonthlyTimeline(setting);
+    for (var date in timeline) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          0, title, body, date, notificationDetail,
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime);
-    } else {
-      final timeline = _createMonthlyTimeline(setting);
-      for (var date in timeline) {
-        await flutterLocalNotificationsPlugin.zonedSchedule(
-            0, title, body, date, notificationDetail,
-            androidAllowWhileIdle: true,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime);
-      }
+              UILocalNotificationDateInterpretation.absoluteTime);
     }
+    return timeline
+        .map((e) => DateTime(e.year, e.month, e.day, e.hour, e.minute))
+        .toList();
   }
 
-  Future _createReminderYearly(
+  Future<List<DateTime>> _createReminderYearly(
       String title, String body, ReminderSetting setting) async {
-    if (setting.freqNum == 1) {
-      await flutterLocalNotificationsPlugin.zonedSchedule(0, title, body,
-          tz.TZDateTime.from(setting.fromDate, tz.local), notificationDetail,
+    final timeline = _createYearlyTimeline(setting);
+    for (var date in timeline) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          0, title, body, date, notificationDetail,
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          matchDateTimeComponents: DateTimeComponents.dateAndTime);
-    } else {
-      final timeline = _createYearlyTimeline(setting);
-      for (var date in timeline) {
-        await flutterLocalNotificationsPlugin.zonedSchedule(
-            0, title, body, date, notificationDetail,
-            androidAllowWhileIdle: true,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime);
-      }
+              UILocalNotificationDateInterpretation.absoluteTime);
     }
+    return timeline
+        .map((e) => DateTime(e.year, e.month, e.day, e.hour, e.minute))
+        .toList();
   }
 
   List<tz.TZDateTime> _createDailyTimeline(ReminderSetting setting) {

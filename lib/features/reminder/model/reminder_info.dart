@@ -19,6 +19,7 @@ class ReminderInfo {
   }
 
   factory ReminderInfo.fromMap(Map<String, dynamic> map) {
+    print(DateTime.parse(map['dateTime']));
     return ReminderInfo(
       title: map['title'],
       message: map['message'],

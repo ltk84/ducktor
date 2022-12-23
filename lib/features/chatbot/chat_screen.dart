@@ -346,14 +346,14 @@ class _ChatScreenState extends State<ChatScreen> {
             builder: ((context) => const ReminderSettingDialog()),
           );
           if (result != null) {
-            await remiderClient.createReminder(
+            final timeline = await remiderClient.createReminder(
               title: result['title'],
               body: result['message'],
               setting: result['setting'],
             );
 
             viewModel.addReminderInfo(
-                result['title'], result['message'], result['setting']);
+                result['title'], result['message'], timeline);
 
             DateTime beginDate =
                 (result['setting'] as ReminderSetting).fromDate;
