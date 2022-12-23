@@ -188,7 +188,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 controller: controller,
                                 padding: EdgeInsets.fromLTRB(
                                     8,
-                                    8,
+                                    108,
                                     8,
                                     viewModel.suggestMessages.isEmpty
                                         ? 24
