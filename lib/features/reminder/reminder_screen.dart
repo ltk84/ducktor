@@ -39,20 +39,34 @@ class ReminderScreen extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   List<ReminderInfo> reminderInfo = snapshot.data ?? [];
-
-                  return ListView.builder(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    itemCount: reminderInfo.length,
-                    itemBuilder: ((context, index) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: ReminderTile(
-                            title: reminderInfo[index].title,
-                            message: reminderInfo[index].message,
-                            dateTime: reminderInfo[index].dateTime,
+                  if (reminderInfo.isEmpty) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 24.0),
+                        child: Text(
+                          'There are no reminders',
+                          style: AppTextStyle.regular16.copyWith(
+                            color: DucktorThemeProvider.onBackground
+                                .withOpacity(0.54),
                           ),
-                        )),
-                  );
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      itemCount: reminderInfo.length,
+                      itemBuilder: ((context, index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: ReminderTile(
+                              title: reminderInfo[index].title,
+                              message: reminderInfo[index].message,
+                              dateTime: reminderInfo[index].dateTime,
+                            ),
+                          )),
+                    );
+                  }
                 } else {
                   return Center(
                       child: CircularProgressIndicator(
