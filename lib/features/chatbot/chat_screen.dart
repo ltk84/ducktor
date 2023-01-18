@@ -12,6 +12,7 @@ import 'package:ducktor/features/chatbot/widgets/speech_to_text_widget.dart';
 import 'package:ducktor/features/chatbot/widgets/suggest_message_box.dart';
 import 'package:ducktor/features/chatbot/widgets/typing_indicator.dart';
 import 'package:ducktor/features/covid_info/covid_info_screen.dart';
+import 'package:ducktor/features/news/news_screen.dart';
 import 'package:ducktor/features/reminder/reminder_client.dart';
 import 'package:ducktor/features/reminder/model/reminder_setting.dart';
 import 'package:ducktor/features/reminder/reminder_screen.dart';
@@ -132,6 +133,57 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
                 centerTitle: true,
+                leading: PopupMenuButton(
+                  offset: const Offset(24, 40),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                  ),
+                  onSelected: ((value) {
+                    Widget screen;
+
+                    switch (value) {
+                      case 1:
+                        screen = const CovidInfoScreen();
+                        break;
+                      default:
+                        screen = const NewsScreen();
+                        break;
+                    }
+
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.rightToLeftWithFade,
+                        child: screen,
+                      ),
+                    );
+                  }),
+                  icon: Icon(
+                    Icons.newspaper_rounded,
+                    color: DucktorThemeProvider.onBackground,
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      buildPopupMenuItem(
+                        title: 'News',
+                        iconData: Icons.info,
+                        iconColor: Colors.blue,
+                        position: 0,
+                      ),
+                      buildPopupMenuItem(
+                        title: 'Covid Infomation',
+                        iconData: Icons.coronavirus_rounded,
+                        iconColor: Colors.green,
+                        position: 1,
+                      ),
+                    ];
+                  },
+                ),
                 actions: [
                   IconButton(
                     onPressed: () async {
@@ -413,6 +465,32 @@ class _ChatScreenState extends State<ChatScreen> {
         highlight: true,
       );
     }
+  }
+
+  PopupMenuItem buildPopupMenuItem({
+    required String title,
+    required IconData iconData,
+    Color? iconColor,
+    required int position,
+  }) {
+    return PopupMenuItem(
+      value: position,
+      textStyle: AppTextStyle.regular16.copyWith(
+        color: DucktorThemeProvider.onBackground,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            iconData,
+            color: iconColor ?? DucktorThemeProvider.onBackground,
+          ),
+          const SizedBox(
+            width: 16,
+          ),
+          Text(title),
+        ],
+      ),
+    );
   }
 
   void connectToSocketIO() {

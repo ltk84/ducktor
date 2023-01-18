@@ -25,70 +25,68 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: DucktorThemeProvider.background,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text(
-            "Settings",
-            style: AppTextStyle.semiBold18.copyWith(
-              color: DucktorThemeProvider.onBackground,
-            ),
-          ),
-          centerTitle: true,
-          leading: BackButton(
+    return Scaffold(
+      backgroundColor: DucktorThemeProvider.background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Settings",
+          style: AppTextStyle.semiBold18.copyWith(
             color: DucktorThemeProvider.onBackground,
-            onPressed: () {
-              Navigator.of(context).pop(_themeChanged);
-            },
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SettingTile(
-                label: 'Chatbot Voice',
-                iconData: Icons.record_voice_over_rounded,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.rightToLeftWithFade,
-                      child: const ChatbotVoiceSetting(),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              SettingTile(
-                label: 'Theme',
-                iconData: Icons.color_lens_rounded,
-                onTap: () async {
-                  bool themeChanged = await Navigator.push(
-                    context,
-                    PageTransition(
-                      type: PageTransitionType.rightToLeftWithFade,
-                      child: const ThemeSetting(),
-                    ),
-                  );
-                  if (themeChanged) {
-                    setState(() {
-                      _themeChanged = true;
-                    });
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-            ],
-          ),
+        centerTitle: true,
+        leading: BackButton(
+          color: DucktorThemeProvider.onBackground,
+          onPressed: () {
+            Navigator.of(context).pop(_themeChanged);
+          },
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SettingTile(
+              label: 'Chatbot Voice',
+              iconData: Icons.record_voice_over_rounded,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeftWithFade,
+                    child: const ChatbotVoiceSetting(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            SettingTile(
+              label: 'Theme',
+              iconData: Icons.color_lens_rounded,
+              onTap: () async {
+                bool themeChanged = await Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeftWithFade,
+                    child: const ThemeSetting(),
+                  ),
+                );
+                if (themeChanged) {
+                  setState(() {
+                    _themeChanged = true;
+                  });
+                }
+              },
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+          ],
         ),
       ),
     );

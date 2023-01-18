@@ -33,6 +33,7 @@ class CovidInfoViewModel {
   ];
 
   int _selectedCountryIndex = 0;
+  CovidInfoSummary _covidInfoSummary = CovidInfoSummary();
 
   int get countryCount {
     return _countries.length;
@@ -64,11 +65,12 @@ class CovidInfoViewModel {
     if (response == null) return CovidInfoSummary();
 
     final CovidInfoSummary result = response.when(success: (data) {
-      return CovidInfoSummary.fromMap(data);
+      _covidInfoSummary = CovidInfoSummary.fromMap(data);
+      return _covidInfoSummary;
     }, error: (message) {
-      return CovidInfoSummary();
+      return _covidInfoSummary;
     }, loading: (message) {
-      return CovidInfoSummary();
+      return _covidInfoSummary;
     });
     return result;
   }

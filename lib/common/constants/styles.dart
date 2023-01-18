@@ -38,6 +38,11 @@ class AppTextStyle {
     fontSize: 12,
     fontWeight: FontWeight.w400,
   );
+
+  static TextStyle regular14 = GoogleFonts.notoSans(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
 }
 
 class AppButtonStyle {
