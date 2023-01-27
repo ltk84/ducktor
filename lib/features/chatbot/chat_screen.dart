@@ -415,6 +415,16 @@ class _ChatScreenState extends State<ChatScreen> {
             );
           }
         };
+      case MessageAction.getToNews:
+        return () {
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.rightToLeftWithFade,
+              child: const NewsScreen(),
+            ),
+          );
+        };
       case MessageAction.openNotiReminderList:
         return () {
           Navigator.push(

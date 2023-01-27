@@ -91,28 +91,36 @@ class _CovidInfoScreenState extends State<CovidInfoScreen> {
                 FutureBuilder(
                   future: viewModel.fetchSummaryInfo(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data != null) {
-                        _totalInfectedCases =
-                            snapshot.data!.totalInfectedCases.toString();
-                        _totalRecoveries =
-                            snapshot.data!.totalRecoveries.toString();
-                        _totalDeaths = snapshot.data!.totalDeaths.toString();
-                        _newInfectedCases =
-                            snapshot.data!.newInfectedCases.toString();
-                        _newRecoveries =
-                            snapshot.data!.newRecoveries.toString();
-                        _newDeaths = snapshot.data!.newDeaths.toString();
-                      }
-                    }
-
-                    if (snapshot.connectionState == ConnectionState.waiting &&
-                        !snapshot.hasData) {
-                      return const Padding(
-                        padding: EdgeInsets.fromLTRB(24, 8, 24, 0),
-                        child: LinearProgressIndicator(),
-                      );
-                    }
+                    _totalInfectedCases = viewModel
+                        .getSelectedCountry()
+                        .summary
+                        .totalInfectedCases
+                        .toString();
+                    _totalRecoveries = viewModel
+                        .getSelectedCountry()
+                        .summary
+                        .totalRecoveries
+                        .toString();
+                    _totalDeaths = viewModel
+                        .getSelectedCountry()
+                        .summary
+                        .totalDeaths
+                        .toString();
+                    _newInfectedCases = viewModel
+                        .getSelectedCountry()
+                        .summary
+                        .newInfectedCases
+                        .toString();
+                    _newRecoveries = viewModel
+                        .getSelectedCountry()
+                        .summary
+                        .newRecoveries
+                        .toString();
+                    _newDeaths = viewModel
+                        .getSelectedCountry()
+                        .summary
+                        .newDeaths
+                        .toString();
 
                     return Container(
                       margin: const EdgeInsets.fromLTRB(8, 0, 8, 8),

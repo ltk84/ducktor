@@ -26,21 +26,35 @@ class NewsScreen extends StatelessWidget {
           color: DucktorThemeProvider.onBackground,
         ),
       ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
-        children: [
-          NewsWidget(
-              title:
-                  "Remote Healthcare Market is estimated to be US\$ 57.1 billion by 2032 with a CAGR of 19.8% over the forecast period (2022-2032) - By PMI",
-              description:
-                  "Remote Healthcare Market, By Service (Real Time Virtual Health, Remote Patient Monitoring, Tele-ICU), By Application (Obstetrics, Cardiology, Diagnosis, and ...",
-              url:
-                  "https://finance.yahoo.com/news/remote-healthcare-market-estimated-us-132800504.html",
-              urlToImage:
-                  "https://media.zenfs.com/en/globenewswire.com/ae25776945614f4cea853b1fd75dfb26"),
-        ],
-      ),
+      body: FutureBuilder(
+          future: viewModel.fetchNews(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  itemCount: snapshot.data!.data.length,
+                  itemBuilder: (context, index) {
+                    return NewsWidget(
+                      title: snapshot.data!.data[index].title,
+                      description: snapshot.data!.data[index].description,
+                      url: snapshot.data!.data[index].url,
+                      urlToImage: snapshot.data!.data[index].urlToImage,
+                    );
+                  });
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return Center(
+                child: Text(
+                  'There is no news available',
+                  style: AppTextStyle.regular16,
+                ),
+              );
+            }
+          }),
     );
   }
 }

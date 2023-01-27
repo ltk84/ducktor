@@ -23,17 +23,18 @@ class CovidInfoViewModel {
       endpoint: "/global",
       asset: AppAsset.world,
       backgroundColor: Colors.blue,
+      summary: CovidInfoSummary(),
     ),
     CovidInfoCountry(
       name: "Vietnam",
       endpoint: "/vietnam",
       asset: AppAsset.vietnamFlag,
       backgroundColor: Colors.red,
+      summary: CovidInfoSummary(),
     ),
   ];
 
   int _selectedCountryIndex = 0;
-  CovidInfoSummary _covidInfoSummary = CovidInfoSummary();
 
   int get countryCount {
     return _countries.length;
@@ -51,7 +52,7 @@ class CovidInfoViewModel {
     _selectedCountryIndex = index;
   }
 
-  Future<CovidInfoSummary> fetchSummaryInfo() async {
+  Future<void> fetchSummaryInfo() async {
     final path = EndpointString.covidInfoBase +
         _countries[_selectedCountryIndex].endpoint +
         EndpointString.getSummaryInfo;
@@ -62,16 +63,17 @@ class CovidInfoViewModel {
       null,
     );
 
-    if (response == null) return CovidInfoSummary();
+    if (response == null) return;
 
-    final CovidInfoSummary result = response.when(success: (data) {
-      _covidInfoSummary = CovidInfoSummary.fromMap(data);
-      return _covidInfoSummary;
+    response.when(success: (data) {
+      _countries[_selectedCountryIndex].summary =
+          CovidInfoSummary.fromMap(data);
+      return _countries[_selectedCountryIndex].summary;
     }, error: (message) {
-      return _covidInfoSummary;
+      return _countries[_selectedCountryIndex].summary;
     }, loading: (message) {
-      return _covidInfoSummary;
+      return _countries[_selectedCountryIndex].summary;
     });
-    return result;
+    return;
   }
 }
